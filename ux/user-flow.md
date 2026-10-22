@@ -11,7 +11,7 @@
 ## 1. Kiến trúc Thông tin Toàn diện (Information Architecture — IA 8 Màn hình)
 
 Hệ thống được thiết kế theo cấu trúc phân tầng phân cấp di động tối ưu cho màn hình khổ dọc **360×800 dp**, gồm 3 tầng kiến trúc:
-- **Tầng 0 (Authentication & Onboarding Stack):** Cổng xác thực danh tính bảo mật qua email `@fpt.edu.vn` và Google OAuth 2.0.
+- **Tầng 0 (Authentication & Onboarding Stack):** Cổng xác thực danh tính qua Email & Mật khẩu, Google OAuth 2.0 và hoàn thiện xác thực học vụ sinh viên.
 - **Tầng 1 (Main Navigation — Bottom Navigation Bar 4 Tabs):** Bốn trụ cột trải nghiệm chính (Home Feed, Member Directory, Chat Room, My Profile).
 - **Tầng 2 (Detail Views, Modals & System Overlays):** Các màn hình chi tiết, trang cài đặt bảo mật và các hộp thoại xác nhận quan trọng.
 
@@ -88,15 +88,16 @@ flowchart TD
     %% Lựa chọn phương thức đăng nhập
     F01_S01 --> F01_CHOICE{"Người dùng chọn<br>Phương thức nào?"}
 
-    %% Nhánh 1: Google SSO (Happy Path 1)
+    %% Nhánh 1: Google SSO (Happy Path 1 - US-02)
     F01_CHOICE -- "Bấm 'Sign in with Google' (US-02)" --> F01_GOOGLE_POPUP["Mở Google OAuth SDK Dialog"]
-    F01_GOOGLE_POPUP --> F01_G_VERIFY{"Email có đuôi<br>@fpt.edu.vn?"}
-    F01_G_VERIFY -- "Đúng email FPT" --> F01_G_SUCCESS["Cấp Access Token & Khởi tạo Profile mặc định"]
+    F01_GOOGLE_POPUP --> F01_G_VERIFY{"Xác thực tài khoản<br>Google thành công?"}
+    F01_G_VERIFY -- "Thành công" --> F01_G_CHECK_PROFILE{"Đã xác thực<br>thông tin học vụ?"}
+    F01_G_CHECK_PROFILE -- "Đã có thông tin" --> F01_G_SUCCESS["Cấp Access Token & Vào App"]
     F01_G_SUCCESS --> F01_HOME
-    F01_G_VERIFY -- "Sai tên miền (Gmail thường)" --> F01_G_ERR["<b>Báo lỗi Inline:</b> 'Vui lòng sử dụng tài khoản email sinh viên/cựu sinh viên @fpt.edu.vn'"]
-    F01_G_ERR --> F01_S01
+    F01_G_CHECK_PROFILE -- "Tài khoản mới chưa có MSSV" --> F01_NAV_VERIFY
+    F01_G_VERIFY -- "Hủy / Lỗi kết nối" --> F01_S01
 
-    %% Nhánh 2: Đăng nhập Email & Mật khẩu (Happy Path 2)
+    %% Nhánh 2: Đăng nhập Email & Mật khẩu (Happy Path 2 - US-01)
     F01_CHOICE -- "Nhập Email & Mật khẩu (US-01)" --> F01_VALIDATE_INPUT{"Kiểm tra cú pháp<br>Client-side Regex"}
     F01_VALIDATE_INPUT -- "Sai định dạng email / Pass < 8 ký tự" --> F01_VAL_ERR["Hiển thị Inline Error đỏ #DC2626 ngay dưới TextField"]
     F01_VAL_ERR --> F01_S01
@@ -107,7 +108,7 @@ flowchart TD
     F01_AUTH_RES -- "Thành công & Đã kích hoạt" --> F01_SAVE_TOKEN["Lưu Encrypted Token vào Keystore/Keychain"]
     F01_SAVE_TOKEN --> F01_HOME
 
-    F01_AUTH_RES -- "Tài khoản chưa xác minh email (US-03)" --> F01_NAV_VERIFY["Điều hướng sang <b>S02: Verify Email</b><br>Tự động gửi mã OTP 6 chữ số"]
+    F01_AUTH_RES -- "Chưa xác minh email / học vụ (US-03)" --> F01_NAV_VERIFY["Điều hướng sang <b>S02: Xác thực Sinh viên & Email</b>"]
     
     F01_AUTH_RES -- "Sai mật khẩu" --> F01_CHECK_ATTEMPTS{"Đã sai quá<br>5 lần liên tiếp?"}
     F01_CHECK_ATTEMPTS -- "Chưa quá 5 lần" --> F01_ERR_PASS["Báo lỗi Inline: 'Mật khẩu không chính xác. Còn lại (5 - n) lần thử'"]
@@ -115,13 +116,13 @@ flowchart TD
     F01_CHECK_ATTEMPTS -- "Đạt 5 lần (Brute-force)" --> F01_LOCKOUT["<b>Khóa tạm thời 60 giây:</b> Vô hiệu hóa nút Đăng nhập + Đồng hồ đếm ngược"]
     F01_LOCKOUT --> F01_S01
 
-    %% Nhánh 3: Xác minh Email (S02)
-    F01_NAV_VERIFY --> F01_S02_OTP["<b>Hiển thị S02 (Chế độ Verify Email):</b><br>• Hiển thị email nhận mã: tr***@fpt.edu.vn<br>• 6 ô nhập mã OTP tách rời (Auto-focus, paste OTP)<br>• Bộ đếm ngược 'Gửi lại mã sau 60s'"]
-    F01_S02_OTP --> F01_SUBMIT_OTP{"Kiểm tra mã OTP"}
-    F01_SUBMIT_OTP -- "OTP chính xác" --> F01_OTP_OK["Kích hoạt tài khoản thành công! Toast thông báo xanh #10B981"]
-    F01_OTP_OK --> F01_HOME
-    F01_SUBMIT_OTP -- "OTP sai / Hết hạn" --> F01_OTP_ERR["Báo lỗi: 'Mã OTP không đúng hoặc đã hết hiệu lực. Vui lòng bấm Gửi lại mã'"]
-    F01_OTP_ERR --> F01_S02_OTP
+    %% Nhánh 3: Xác thực Học vụ Sinh viên & Email (S02 - US-03)
+    F01_NAV_VERIFY --> F01_S02_FORM["<b>Hiển thị S02 (Chế độ Xác thực Sinh viên):</b><br>• Điền MSSV (format ^[A-Z]{2}\\d{6}$)<br>• Chọn Campus (5 cơ sở) & Ngành đào tạo<br>• Chọn Chuyên ngành hẹp liên động<br>• Mã OTP xác minh quyền sở hữu email"]
+    F01_S02_FORM --> F01_SUBMIT_FORM{"Kiểm tra hợp lệ"}
+    F01_SUBMIT_FORM -- "Thông tin chính xác" --> F01_VERIFY_OK["Xác thực thành công! Dialog xanh #10B981"]
+    F01_VERIFY_OK --> F01_HOME
+    F01_SUBMIT_FORM -- "Sai MSSV / Sai OTP" --> F01_VERIFY_ERR["Báo lỗi Inline đỏ #DC2626: 'MSSV không đúng định dạng hoặc mã OTP không khớp'"]
+    F01_VERIFY_ERR --> F01_S02_FORM
 
     %% Nhánh 4: Quên & Đặt lại Mật khẩu (S02 - US-07)
     F01_CHOICE -- "Bấm 'Quên mật khẩu?'" --> F01_S02_RESET["<b>Hiển thị S02 (Chế độ Reset Password):</b><br>• Ô nhập Email @fpt.edu.vn<br>• Nút 'Gửi mã khôi phục' (48dp, màu cam #F27024)"]
@@ -231,9 +232,9 @@ Bảng đối chiếu đảm bảo **100% các User Stories cốt lõi** đều 
 
 | Mã US | Mô tả User Story | Thuộc Luồng | Màn hình Trực tiếp | Trạng thái Ngoại lệ / Xử lý Lỗi (Error State) | Tiêu chuẩn Khả năng Tiếp cận (WCAG AA & Ergonomics) | Thành viên Sở hữu |
 | :---: | :--- | :---: | :---: | :--- | :--- | :---: |
-| **`US-01`** | Đăng nhập bằng Email (@fpt.edu.vn) & Mật khẩu | **`F01`** | **`S01`** | - Báo lỗi sai mật khẩu kèm số lần còn lại.<br>- Khóa 60s khi sai 5 lần liên tiếp (Rate limit). | - Touch target nút Đăng nhập đạt **48dp**.<br>- Chữ phụ xám `#595959` tương phản đạt **5.4:1**. | **TV1 (Tâm)** |
-| **`US-02`** | Đăng nhập bằng Google SSO FPT | **`F01`** | **`S01`** | Báo lỗi khi chọn tài khoản Gmail cá nhân không phải tên miền giáo dục FPT. | Nút Google có icon chuẩn, viền `#E5E7EB`, chiều cao tối thiểu **48dp**. | **TV1 (Tâm)** |
-| **`US-03`** | Xác minh Email sinh viên qua mã OTP 6 số | **`F01`** | **`S02`** | - Báo lỗi OTP sai / hết hạn.<br>- Bộ đếm ngược 60 giây chống bấm gửi lại liên tục. | 6 ô OTP tách rời, tự động nhảy con trỏ phím (Auto-focus), hỗ trợ paste OTP nhanh. | **TV1 (Tâm)** |
+| **`US-01`** | Đăng nhập bằng Email & Mật khẩu | **`F01`** | **`S01`** | - Báo lỗi sai mật khẩu kèm số lần còn lại.<br>- Khóa 60s khi sai 5 lần liên tiếp (Rate limit). | - Touch target nút Đăng nhập đạt **48dp**.<br>- Chữ phụ xám `#595959` tương phản đạt **5.4:1**. | **TV1 (Tâm)** |
+| **`US-02`** | Đăng nhập bằng Google để tiết kiệm thời gian | **`F01`** | **`S01`** | Báo lỗi khi kết nối Google OAuth thất bại hoặc hủy đăng nhập. | Nút Google có icon chuẩn, viền `#E5E7EB`, chiều cao tối thiểu **48dp**. | **TV1 (Tâm)** |
+| **`US-03`** | Xác minh email đăng ký & Xác thực học vụ sinh viên | **`F01`** | **`S02`** | - Báo lỗi OTP sai / hết hạn.<br>- Báo lỗi sai định dạng MSSV `^[A-Z]{2}\d{6}$`. | Ô nhập MSSV tự động viết hoa; Dropdown chuyên ngành liên động theo ngành học. | **TV1 (Tâm)** |
 | **`US-04`** | Cập nhật hồ sơ cá nhân (Bio, Campus, Khóa, Ngành) | **`F03`** | **`S07`** | Báo lỗi để trống các trường bắt buộc; lưu tạm form khi mất kết nối mạng. | Chiều cao ô nhập text tối thiểu **48dp**, cỡ chữ nhãn và giá trị **≥ 14sp**. | **TV4 (Tín)** |
 | **`US-05`** | Xem hồ sơ công khai của thành viên khác | **`F02`** | **`S05`** | Báo lỗi người dùng không tồn tại hoặc đã bị khóa tài khoản. | Phân cấp thị giác rõ ràng: Tên **20sp Bold**, Thẻ kỹ năng padding **8dp/16dp**. | **TV3 (Khải)** |
 | **`US-06`** | Tìm kiếm & Lọc danh bạ thành viên theo Campus/Ngành | **`F02`** | **`S04`** | Hiển thị màn hình rỗng (**Empty State**) kèm nút 'Xóa tất cả bộ lọc' khi không có kết quả. | Filter Chips cao đúng **48dp**, có dấu tích `✓` khi chọn (không chỉ dựa vào màu sắc). | **TV2 (Trung)** |

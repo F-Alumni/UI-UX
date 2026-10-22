@@ -134,9 +134,9 @@ Bảng ma trận đối chiếu mức độ tương tác và đáp ứng của 3
 
 | Mã US | Tóm tắt Nội dung User Story | `P01` (Trương Chí Trung - SV Năm 3) | `P02` (Đặng Minh Tuấn - Alumni Mentor) | `P03` (Lê Hoàng Lan - Tân SV K20) | Màn hình Đảm nhiệm | TV Phụ trách |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: |
-| **`US-01`** | Đăng nhập bằng Email (@fpt.edu.vn) & Mật khẩu | `[M]` Đăng nhập thường xuyên | `[S]` Đăng nhập bằng email alumni | `[M]` Đăng nhập tài khoản mới tạo | **`S01`** | **TV1 (Tâm)** |
-| **`US-02`** | Đăng nhập nhanh 1 chạm bằng Google SSO FPT | `[M]` Ưu tiên số 1 để tiết kiệm giờ | `[S]` Đăng nhập bằng Google cá nhân | `[M]` Tiện lợi, không sợ quên pass | **`S01`** | **TV1 (Tâm)** |
-| **`US-03`** | Xác minh quyền sở hữu email qua mã OTP 6 số | `[S]` Đã xác minh từ trước | `[S]` Xác minh tài khoản cựu SV | `[M]` Bắt buộc khi mới kích hoạt app | **`S02`** | **TV1 (Tâm)** |
+| **`US-01`** | Đăng nhập bằng Email và Mật khẩu | `[M]` Đăng nhập thường xuyên | `[S]` Đăng nhập bằng email alumni | `[M]` Đăng nhập tài khoản mới tạo | **`S01`** | **TV1 (Tâm)** |
+| **`US-02`** | Đăng nhập bằng Google để tiết kiệm thời gian | `[M]` Ưu tiên số 1 để tiết kiệm giờ | `[S]` Đăng nhập bằng Google cá nhân | `[M]` Tiện lợi, không sợ quên pass | **`S01`** | **TV1 (Tâm)** |
+| **`US-03`** | Xác minh email đăng ký & Xác thực học vụ sinh viên | `[S]` Đã xác minh từ trước | `[S]` Xác minh tài khoản cựu SV | `[M]` Bắt buộc khi mới kích hoạt app | **`S02`** | **TV1 (Tâm)** |
 | **`US-04`** | Cập nhật hồ sơ cá nhân (Bio, Campus, Khóa, Ngành) | `[M]` Cập nhật CV, khóa K19 SE | `[M]` Cập nhật công ty, kinh nghiệm | `[M]` Điền thông tin tân sinh viên | **`S07`** | **TV4 (Tín)** |
 | **`US-05`** | Xem hồ sơ công khai của thành viên khác | `[M]` Soi kỹ kỹ năng & profile Mentor | `[S]` Xem qua hồ sơ sinh viên hẹn gặp | `[M]` Xem kinh nghiệm cựu SV khóa trước | **`S05`** | **TV3 (Khải)** |
 | **`US-06`** | Tìm kiếm & Lọc thành viên theo Campus & Ngành | `[M]` Lọc Campus HCMC + Ngành SE | `[C]` Tìm bạn cùng khóa K15 | `[M]` Lọc Campus Đà Nẵng + Ngành AI | **`S04`** | **TV2 (Trung)** |
