@@ -20,7 +20,7 @@
 
 ### 1.2. Giải pháp: FPT Alumni Connect
 **FPT Alumni Connect** là ứng dụng di động mạng xã hội học đường chuyên biệt giải quyết bài toán kết nối giữa Cựu sinh viên và Sinh viên Đại học FPT trên toàn quốc (5 cơ sở: TP.HCM, Hà Nội, Đà Nẵng, Cần Thơ, Quy Nhơn):
-- **Đặt lịch tư vấn 1-1 tự động:** Nhúng trực tiếp đường dẫn **Google Calendar (`US-11`)** của Cựu sinh viên vào hồ sơ để sinh viên tự chọn khung giờ rảnh 30 phút mà không cần chat qua lại.
+- **Chia sẻ Lịch cá nhân qua Google Calendar:** Thêm trực tiếp đường dẫn **Google Calendar (`US-11`)** vào hồ sơ cá nhân để người khác có thể xem thời gian rảnh/bận và chủ động nhắn tin liên hệ khi cần.
 - **Danh bạ Thông minh:** Tìm kiếm và lọc thành viên chính xác theo **Campus** và **Chuyên ngành hẹp** (SE, AI, IA, Digital Marketing...) với vùng chạm chuẩn `48×48dp` (`US-06`).
 - **An toàn & Quyền riêng tư:** Tùy chọn ẩn số điện thoại/email cá nhân qua các công tắc **Privacy có nhãn [ON]/[OFF] (`US-09`)** và cơ chế **Chặn người dùng quấy rối (`US-10`)** kèm hộp thoại xác nhận.
 - **Xác thực Sinh viên FPT:** Tối ưu hóa xác thực thông qua bộ thông tin học vụ (Mã số sinh viên `SE193059`, Campus, Ngành, Chuyên ngành hẹp) thuận tiện và chính xác (`US-03`).

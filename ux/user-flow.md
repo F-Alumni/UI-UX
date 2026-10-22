@@ -42,12 +42,12 @@ graph TD
 
     %% Tầng 2: Detail Views & Overlays
     subgraph STACK_2 ["Tầng 2: Màn hình Chi tiết & Hộp thoại Hành động (Detail & Modals)"]
-        TAB2 -- "Chọn thẻ Cựu sinh viên" --> S05["<b>S05: Member Public Profile</b><br>(TV3 phụ trách)<br>• Chi tiết Kỹ năng, Kinh nghiệm (US-05)<br>• Nút Chính: 'Book via Google Calendar' (US-11)<br>• Nút Viền: 'Direct Message' (US-12)<br>• Nút Đỏ: 'Block This User' (US-10)"]
+        TAB2 -- "Chọn thẻ Cựu sinh viên" --> S05["<b>S05: Member Public Profile</b><br>(TV3 phụ trách)<br>• Chi tiết Kỹ năng, Kinh nghiệm (US-05)<br>• Nút Viền: 'Xem Lịch Google Calendar' (US-11)<br>• Nút Chính: 'Direct Message' (US-12)<br>• Nút Đỏ: 'Block This User' (US-10)"]
         TAB1 -- "Xem bài viết cựu SV" --> S05
         TAB4 -- "Bấm 'Privacy & Security'" --> S08["<b>S08: Privacy & Account Settings</b><br>(TV4 phụ trách)<br>• 5 Công tắc Privacy có nhãn ON/OFF (US-09)<br>• Mục 'Change Password' (US-07)<br>• Danh sách chặn: 'Blocked Users' (US-10)<br>• Nút Đỏ: 'Log Out' (US-08)"]
 
         S05 -- "Bấm 'Block This User'" --> MODAL_BLOCK["<b>Modal Dialog: Xác nhận Chặn</b><br>• Tiêu đề cảnh báo màu đỏ (#DC2626)<br>• Nút Hủy (Cancel) & Xác nhận Chặn"]
-        S05 -- "Bấm 'Book Calendar'" --> MODAL_CAL["<b>Google Calendar Booking Sheet</b><br>• Mở Webview/Link chọn khung giờ 30m<br>• Đồng bộ lịch hẹn vào thiết bị"]
+        S05 -- "Bấm 'Xem Lịch Calendar'" --> MODAL_CAL["<b>Mở Google Calendar Link</b><br>• Mở link calendar.google.com ngoài trình duyệt<br>• Xem thời gian rảnh để chủ động liên hệ"]
         S08 -- "Bấm 'Log Out'" --> S01
     end
 
@@ -141,10 +141,10 @@ flowchart TD
 
 ---
 
-### 🔍 Flow 2 (`F02`): Khám phá Thành viên & Đặt lịch Tư vấn 1-1 qua Google Calendar (Discovery & Booking Flow)
+### 🔍 Flow 2 (`F02`): Khám phá Thành viên & Xem Lịch Google Calendar để Liên hệ (Discovery & Contact Flow)
 
 > **Màn hình Trọng tâm:** `S03` (Home Feed), `S04` (Directory), `S05` (Member Public Profile) — **Do TV2 & TV3 phụ trách phối hợp**.  
-> **User Stories Bao phủ:** `US-05` (View Profile), `US-06` (Member Directory & Filter), `US-11` (Google Calendar Link).
+> **User Stories Bao phủ:** `US-05` (View Profile), `US-06` (Member Directory & Filter), `US-11` (Add & View Google Calendar Link).
 
 #### A. Sơ đồ Luồng Chi tiết `F02` (Mermaid Flowchart)
 
@@ -168,18 +168,16 @@ flowchart TD
     %% Nhánh Xem Profile S05
     F02_QUERY_RES -- "Hiển thị danh sách thẻ Alumni" --> F02_SELECT_CARD["Bấm vào Thẻ Cựu SV: Đặng Minh Tuấn (K15 • Grab)"]
     F02_TAP_AUTHOR --> F02_S05
-    F02_SELECT_CARD --> F02_S05["<b>Mở S05: Member Public Profile (US-05):</b><br>• Avatar + Tích xanh Verified Alumni + Khóa K15 SE<br>• Bio tóm tắt & Kỹ năng (Go, Kubernetes, Cloud)<br>• <b>Nút CTA Chính duy nhất: 'Book via Google Calendar' (Cam #F27024, 48dp)</b><br>• Nút Phụ Viền: 'Direct Message' (Xanh đen #1B365D)<br>• Nút Viền Đỏ Cuối Trang: '🚫 Block This User' (#DC2626)"]
+    F02_SELECT_CARD --> F02_S05["<b>Mở S05: Member Public Profile (US-05):</b><br>• Avatar + Tích xanh Verified Alumni + Khóa K15 SE<br>• Bio tóm tắt & Kỹ năng (Go, Kubernetes, Cloud)<br>• <b>Nút CTA Chính: 'Direct Message' (Xanh đen #1B365D, 48dp - US-12)</b><br>• Nút Viền: 'Xem Lịch Google Calendar' (US-11)<br>• Nút Viền Đỏ Cuối Trang: '🚫 Block This User' (#DC2626)"]
 
-    %% Đặt lịch qua Google Calendar
-    F02_S05 --> F02_TAP_CALENDAR["Sinh viên bấm 'Book via Google Calendar' (US-11)"]
-    F02_TAP_CALENDAR --> F02_CHECK_CAL_LINK{"Mentor có cài đặt<br>link Google Calendar hợp lệ?"}
+    %% Xem Lịch qua Google Calendar Link
+    F02_S05 --> F02_TAP_CALENDAR["Sinh viên bấm 'Xem Lịch Google Calendar' (US-11)"]
+    F02_TAP_CALENDAR --> F02_CHECK_CAL_LINK{"Người dùng có đính kèm<br>link Google Calendar?"}
 
-    F02_CHECK_CAL_LINK -- "Có link Calendar" --> F02_OPEN_CALENDAR["Mở Custom Chrome Tab / Webview nhúng lịch Google Calendar của Mentor"]
-    F02_OPEN_CALENDAR --> F02_PICK_SLOT["Sinh viên tự chọn ca rảnh 30 phút (Ví dụ: 09:30 AM Thứ Bảy)"]
-    F02_PICK_SLOT --> F02_CONFIRM_BOOKING["Xác nhận đặt hẹn & Nhập ghi chú câu hỏi cần tư vấn OJT"]
-    F02_CONFIRM_BOOKING --> F02_CAL_SUCCESS["<b>Thành công!</b><br>• Tự động thêm sự kiện vào Google Calendar của sinh viên<br>• Gửi email thông báo xác nhận tới cả 2 bên"]
+    F02_CHECK_CAL_LINK -- "Có link Calendar" --> F02_OPEN_CALENDAR["Mở Custom Chrome Tab / Webview hiển thị link Google Calendar của người dùng để xem thời gian rảnh/bận"]
+    F02_OPEN_CALENDAR --> F02_CAL_SUCCESS["Sinh viên nắm được lịch rảnh để chủ động nhắn tin Direct Message (US-12)"]
 
-    F02_CHECK_CAL_LINK -- "Mentor chưa cập nhật link" --> F02_CAL_EMPTY["Hiển thị Tooltip thông báo: 'Mentor hiện chưa mở lịch hẹn trực tuyến. Vui lòng gửi tin nhắn Direct Message'"]
+    F02_CHECK_CAL_LINK -- "Chưa cập nhật link" --> F02_CAL_EMPTY["Hiển thị Tooltip thông báo: 'Thành viên này chưa chia sẻ link Google Calendar. Bạn có thể gửi tin nhắn trực tiếp'"]
     F02_CAL_EMPTY --> F02_S05
 ```
 
@@ -197,7 +195,7 @@ flowchart TD
     F03_START(["Bắt đầu Flow 3: Quản lý Tài khoản & An toàn Cá nhân"]) --> F03_CHOICE{"Người dùng muốn<br>thực hiện tác vụ gì?"}
 
     %% Nhánh 1: Cập nhật Profile & Link Calendar
-    F03_CHOICE -- "Chỉnh sửa Hồ sơ (US-04, US-11)" --> F03_S07["<b>Mở Tab 4: S07 My Profile:</b><br>• Form chỉnh sửa Họ tên, Khóa, Campus, Bio<br>• <b>Ô nhập: 'Google Calendar Booking Link' (US-11)</b><br>• Nút 'Save Changes' (48dp, Cam #F27024)"]
+    F03_CHOICE -- "Chỉnh sửa Hồ sơ (US-04, US-11)" --> F03_S07["<b>Mở Tab 4: S07 My Profile:</b><br>• Form chỉnh sửa Họ tên, Khóa, Campus, Bio<br>• <b>Ô nhập: 'Google Calendar Link' (US-11)</b><br>• Nút 'Save Changes' (48dp, Cam #F27024)"]
     F03_S07 --> F03_INPUT_CAL["Dán đường dẫn lịch cá nhân (calendar.google.com/...)"]
     F03_INPUT_CAL --> F03_SAVE_PROFILE["Bấm 'Save Changes'"]
 
@@ -218,7 +216,7 @@ flowchart TD
     %% Nhánh 3: Chặn tài khoản quấy rối (US-10)
     F03_CHOICE -- "Chặn người dùng quấy rối (US-10)" --> F03_OPEN_OFFENDER["Mở trang cá nhân S05 của đối tượng quấy rối"]
     F03_OPEN_OFFENDER --> F03_CLICK_BLOCK["Kéo xuống cuối trang, bấm nút <b>'🚫 Block This User'</b> (Viền đỏ #DC2626, cao 48dp)"]
-    F03_CLICK_BLOCK --> F03_MODAL_CONFIRM["<b>Hiển thị Modal Confirmation Dialog (Quyết định D01):</b><br>• Tiêu đề: 'Chặn Đặng Minh Tuấn?'<br>• Nội dung: 'Người này sẽ không thể gửi tin nhắn hoặc đặt lịch hẹn trên Google Calendar của bạn nữa.'<br>• 2 Nút: 'Hủy bỏ' (Outlined 48dp) và <b>'Xác nhận Chặn' (Đỏ đặc #DC2626, 48dp)</b>"]
+    F03_CLICK_BLOCK --> F03_MODAL_CONFIRM["<b>Hiển thị Modal Confirmation Dialog (Quyết định D01):</b><br>• Tiêu đề: 'Chặn Đặng Minh Tuấn?'<br>• Nội dung: 'Người này sẽ không thể gửi tin nhắn hoặc xem thông tin liên hệ của bạn nữa.'<br>• 2 Nút: 'Hủy bỏ' (Outlined 48dp) và <b>'Xác nhận Chặn' (Đỏ đặc #DC2626, 48dp)</b>"]
     F03_MODAL_CONFIRM --> F03_USER_DECISION{"Người dùng chọn?"}
     F03_USER_DECISION -- "Bấm 'Hủy bỏ'" --> F03_CANCEL_BLOCK["Đóng Modal, giữ nguyên trạng thái"]
     F03_USER_DECISION -- "Bấm 'Xác nhận Chặn'" --> F03_EXECUTE_BLOCK["1. Thêm ID người dùng vào 'Blocked Users List' trong S08<br>2. Hủy các cuộc hội thoại chat đang có<br>3. Điều hướng người dùng quay trở lại S04 Directory kèm Toast xác nhận"]
@@ -243,7 +241,7 @@ Bảng đối chiếu đảm bảo **100% các User Stories cốt lõi** đều 
 | **`US-08`** | Đăng xuất an toàn & Hủy phiên token | **`F01, F03`** | **`S01, S08`** | Hộp thoại xác nhận đăng xuất tránh bấm nhầm; xóa sạch session trong bộ nhớ an toàn. | Nút Đăng xuất màu đỏ cam có icon chỉ dẫn rõ ràng. | **TV1 & TV4** |
 | **`US-09`** | Cài đặt quyền riêng tư & Ẩn/Hiện thông tin cá nhân | **`F03`** | **`S08`** | Báo lỗi đồng bộ cài đặt khi mất mạng kèm nút Retry. | Toàn bộ các công tắc Switch đều có nhãn chữ tường minh **`[ON]` / `[OFF]`** cạnh switch. | **TV4 (Tín)** |
 | **`US-10`** | Chặn người dùng làm phiền & Quản lý danh sách chặn | **`F02, F03`** | **`S05, S08`** | Hộp thoại xác nhận chặn (**Confirmation Dialog**) với nút Hủy và nút Xác nhận Chặn màu đỏ `#DC2626`. | Nút 'Block This User' đặt ở vị trí an toàn cuối trang, cao **48dp**, không giấu trong menu nhỏ. | **TV3 & TV4** |
-| **`US-11`** | Nhúng link Google Calendar để liên hệ & đặt lịch 1-1 | **`F02, F03`** | **`S05, S07`** | Inline Error viền đỏ `#DC2626` khi dán sai URL Google Calendar kèm nút 'Retry Sync'. | Nút chính **'Book via Google Calendar'** màu cam FPT `#F27024` cao **48dp** nổi bật nhất màn hình. | **TV3 & TV4** |
+| **`US-11`** | Add link lịch Google Calendar vào Profile để liên hệ khi cần | **`F02, F03`** | **`S05, S07`** | Inline Error viền đỏ `#DC2626` khi dán sai URL Google Calendar kèm nút 'Retry Sync'. | Nút mở link **'Xem Lịch Google Calendar'** viền xanh Navy `#1B365D` cao **48dp** trên Profile. | **TV3 & TV4** |
 
 ---
 

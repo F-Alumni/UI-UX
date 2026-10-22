@@ -48,15 +48,15 @@ Tạo 3 Frame con đặt ngang nhau (mỗi card rộng `440 dp`, cao `800 dp`, b
 
 #### 📌 Card 1: `P01: Trương Chí Trung` (Primary Persona — SV Năm 3 K19)
 - **Header:** Tag cam `[Primary Persona]` (`#F27024`), Avatar nam sinh viên đeo kính cận, Họ tên: **Trương Chí Trung (20 tuổi, K19 SE, FPT HCMC)**.
-- **Quote:** *"Cần kết nối nhanh với Alumni ngành SE để review CV & xin lịch hẹn tư vấn OJT 1-1 mà không tốn thời gian nhắn tin chờ đợi."*
-- **Bio & Goals:** Sinh viên năm 3 chuẩn bị OJT kỳ Fall 2026. Mục tiêu: Tìm cựu SV ngành SE qua Directory (`US-06`), đặt lịch rảnh 30 phút qua Google Calendar (`US-11`).
-- **Pain Points:** Khó tìm cựu SV uy tín, bài đăng group Facebook dễ bị trôi, lệch giờ làm việc khó hẹn.
+- **Quote:** *"Cần kết nối nhanh với Alumni ngành SE để review CV và xem link lịch Google Calendar của anh ấy để chủ động nhắn tin khi anh ấy rảnh."*
+- **Bio & Goals:** Sinh viên năm 3 chuẩn bị OJT kỳ Fall 2026. Mục tiêu: Tìm cựu SV ngành SE qua Directory (`US-06`), xem link lịch Google Calendar (`US-11`) và nhắn tin kết nối (`US-12`).
+- **Pain Points:** Khó tìm cựu SV uy tín, bài đăng group Facebook dễ bị trôi, sợ nhắn tin làm phiền vào giờ hành chính.
 - **Context & A11y:** Dùng máy 1 tay ngón cái ngoài sảnh trường nắng gắt. Cận 3 độ (Cần tương phản ≥ 4.5:1, touch target ≥ 48dp).
 
 #### 📌 Card 2: `P02: Đặng Minh Tuấn` (Secondary Persona — Senior Alumni Mentor)
 - **Header:** Tag xanh Navy `[Alumni Mentor]` (`#1B365D`), Avatar Tech Lead, Họ tên: **Đặng Minh Tuấn (26 tuổi, Cựu SV K15 SE, Senior SE tại Singapore/Grab)**.
-- **Quote:** *"Sẵn sàng dành 1-2 tiếng cuối tuần tư vấn cho đàn em FPT, nhưng cần tự động hóa lịch hẹn và tuyệt đối bảo vệ số điện thoại cá nhân."*
-- **Bio & Goals:** 4 năm kinh nghiệm Distributed Systems. Mục tiêu: Mở link Google Calendar (`US-11`) để sinh viên tự book giờ, ẩn SĐT qua Privacy Toggles (`US-09`).
+- **Quote:** *"Sẵn sàng hỗ trợ đàn em FPT, nhưng cần add link Google Calendar lên profile để các em biết lúc rảnh mà nhắn tin, và tuyệt đối bảo vệ số điện thoại cá nhân."*
+- **Bio & Goals:** 4 năm kinh nghiệm Distributed Systems. Mục tiêu: Add link Google Calendar (`US-11`) để sinh viên tiện theo dõi thời gian rảnh, ẩn SĐT qua Privacy Toggles (`US-09`).
 - **Pain Points:** Rất bận, sợ lộ số điện thoại cá nhân bị spam/quấy rối ngoài giờ, không thích bị chấm điểm sao công khai.
 - **A11y:** Công tắc Privacy bắt buộc có chữ `[ON]/[OFF]`, nút `Block This User` (`US-10`) phải rõ ràng ở cuối trang.
 
@@ -75,13 +75,13 @@ Dựng cây phân cấp 3 tầng (sao chép trực quan từ sơ đồ Mermaid t
   - Tab 2: `S04 Member Directory`
   - Tab 3: `S06 Chat Room`
   - Tab 4: `S07 My Profile`
-- **Tầng 2:** `S05 Member Public Profile` (nối từ S03 và S04), `S08 Privacy & Security` (nối từ S07), các Overlays (Modal Block Confirmation, Booking Calendar Sheet, Network Error Banner).
+- **Tầng 2:** `S05 Member Public Profile` (nối từ S03 và S04), `S08 Privacy & Security` (nối từ S07), các Overlays (Modal Block Confirmation, Mở liên kết Google Calendar, Network Error Banner).
 
 ### 1.4. Frame 4: Sơ đồ 3 User Flows (`1440 × 1200 dp`)
 Vẽ 3 khối luồng tương tác dạng flowchart trực quan:
 - **Flow 1 (`F01` — TV1 làm chủ):** Nhánh Google SSO, Nhánh Email/Pass, Nhánh xác thực học vụ `S02`, Nhánh khóa tạm 60s khi sai 5 lần và Nhánh khôi phục mật khẩu.
-- **Flow 2 (`F02`):** `S03/S04` ➔ Lọc Campus/Ngành ➔ Chọn thẻ Alumni ➔ `S05 Public Profile` ➔ Bấm `Book via Google Calendar` ➔ Đồng bộ lịch.
-- **Flow 3 (`F03`):** `S07 My Profile` ➔ Cập nhật link Calendar ➔ `S08 Privacy Toggles [ON]/[OFF]` ➔ Bấm `Block User` trên S05 ➔ Modal xác nhận màu đỏ `#DC2626`.
+- **Flow 2 (`F02`):** `S03/S04` ➔ Lọc Campus/Ngành ➔ Chọn thẻ Alumni ➔ `S05 Public Profile` ➔ Bấm `Xem Lịch Google Calendar` ➔ Mở liên kết ngoài để biết thời gian rảnh.
+- **Flow 3 (`F03`):** `S07 My Profile` ➔ Thêm/sửa link Calendar ➔ `S08 Privacy Toggles [ON]/[OFF]` ➔ Bấm `Block User` trên S05 ➔ Modal xác nhận màu đỏ `#DC2626`.
 
 ---
 
@@ -238,7 +238,7 @@ Khi chấm bài vấn đáp, giảng viên thường hỏi xoáy vào vai trò c
 
 ### ❓ Câu 1: *"Tại sao em lại chọn bạn Trương Chí Trung làm Primary Persona mà không chọn Cựu sinh viên hay Giảng viên?"*
 - 💡 **Câu trả lời mẫu:**  
-  *"Thưa thầy/cô, căn cứ theo kết quả nghiên cứu khảo sát `E01` trên 120 sinh viên K18-K19, bài toán nhức nhối nhất của dự án là giải quyết nhu cầu tìm kiếm Mentor và chuẩn bị thực tập OJT của sinh viên đang học. Sinh viên là đối tượng **chủ động tạo ra tác vụ (Active Tasks)** nhiều nhất trong ứng dụng: từ tìm kiếm danh bạ theo Campus/Ngành, xem hồ sơ, đặt lịch Google Calendar cho đến đăng bài hỏi đáp. Do đó, bạn Trương Chí Trung (SV năm 3 chuẩn bị OJT) được chọn làm **Primary Persona (`P01`)**. Cựu sinh viên Đặng Minh Tuấn đóng vai trò là **Secondary Persona (`P02`)** với tư cách là người cố vấn đón nhận các yêu cầu kết nối."*
+  *"Thưa thầy/cô, căn cứ theo kết quả nghiên cứu khảo sát `E01` trên 120 sinh viên K18-K19, bài toán nhức nhối nhất của dự án là giải quyết nhu cầu tìm kiếm Mentor và chuẩn bị thực tập OJT của sinh viên đang học. Sinh viên là đối tượng **chủ động tạo ra tác vụ (Active Tasks)** nhiều nhất trong ứng dụng: từ tìm kiếm danh bạ theo Campus/Ngành, xem hồ sơ, xem link lịch rảnh để liên hệ, cho đến đăng bài hỏi đáp. Do đó, bạn Trương Chí Trung (SV năm 3 chuẩn bị OJT) được chọn làm **Primary Persona (`P01`)**. Cựu sinh viên Đặng Minh Tuấn đóng vai trò là **Secondary Persona (`P02`)** với tư cách là người cố vấn đón nhận các yêu cầu kết nối."*
 
 ### ❓ Câu 2: *"Màn hình S02 của em xác thực danh tính sinh viên như thế nào nếu không bắt buộc nhập email @fpt.edu.vn?"*
 - 💡 **Câu trả lời mẫu:**  
