@@ -507,6 +507,55 @@
       display: flex;
       gap: 8px;
     }
+
+    /* Print to PDF Styles (12 slides on 12 separate landscape pages) */
+    @media print {
+      @page {
+        size: 16in 9in landscape;
+        margin: 0;
+      }
+      html, body {
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        overflow: visible !important;
+        min-height: auto !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .top-bar, .bottom-nav {
+        display: none !important;
+      }
+      .slide-stage {
+        position: static !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        max-height: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        display: block !important;
+      }
+      .slide {
+        position: relative !important;
+        display: flex !important;
+        width: 16in !important;
+        height: 9in !important;
+        max-height: 9in !important;
+        box-sizing: border-box !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        overflow: hidden !important;
+        padding: 44px 56px !important;
+        background: #FFFFFF !important;
+      }
+    }
   </style>
 </head>
 <body>
