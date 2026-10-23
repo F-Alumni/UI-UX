@@ -51,8 +51,14 @@ UI-UX/
 │   ├── persona.md                 # Bộ 3 Personas chuẩn 12 trường PRM393 & Ma trận bao phủ 50 Stories
 │   └── user-flow.md               # Sơ đồ IA 8 màn hình & 3 User Flows chi tiết bằng Mermaid Flowcharts
 │
-├── design/                        # [Design Specifications & Tokens]
-│   └── screen-spec.md             # Đặc tả chi tiết UI, Auto Layout, Padding, 5 trạng thái cho S01..S08
+├── design/                        # [Design System, Decisions & Screen Specifications] (TV3 & TV4 Chủ trì)
+│   ├── DESIGN.md                  # Hệ thống Design Tokens (Màu, Chữ, Lưới 8dp) & 9 Nhóm Component (CMP-01..09)
+│   ├── design-decisions.md        # Quyết định D01..D07, Checklist A11y WCAG 2.2 AA & 20 Tiêu chí UI Simplicity (100/100)
+│   └── screen-spec.md             # Đặc tả chi tiết 6 phần (Layout, Components, States, Interactions, Nav, Constraints) cho S01..S08
+│
+├── docs/                          # [Tài liệu Hướng dẫn Bảo vệ & Blueprint]
+│   ├── figma-blueprint.md         # Hướng dẫn cấu trúc Figma 6 Pages
+│   └── lab2-slide-and-demo-guide.md # Nội dung 12 Slide báo cáo, Kịch bản Demo 5 phút & Bộ câu hỏi phản biện Q&A
 │
 ├── handoff/                       # [Developer Handoff]
 │   └── flutter-handoff.md         # Bàn giao Flutter: Token Mapping, Widget Trees, Regex Validators, Semantics
@@ -61,6 +67,7 @@ UI-UX/
 │   └── ai-design-log.md           # Nhật ký Stitch v0, 3 vòng lặp có ý nghĩa, 7 phát hiện Heuristics & Quyết định
 │
 └── assets/                        # [Tài nguyên Hình ảnh Bằng chứng]
+    ├── figma/                     # Trọn bộ 8 ảnh chụp màn hình Mobile chính thức (s01.png -> s08.png, không có Booking 1-1)
     └── stitch/                    # 15 ảnh chụp màn hình v0 và Before/After từ Google Stitch
         ├── v0_overview_all_4_screens.png
         ├── iter1_before.png / iter1_after.png

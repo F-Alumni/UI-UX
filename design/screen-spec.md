@@ -271,9 +271,126 @@ Khi người dùng nhấn *"Quên mật khẩu?"* từ `S01`, `S02` hiển thị
 
 ---
 
-## 5. Khung Cắm Mốc Tiếp nối cho Thành viên Nhóm (`S03` → `S08`)
+## 5. Đặc tả Chi tiết Màn hình `S03`: Home Feed — Bảng tin Chung & Nhóm Ngành (TV2 Trương Chí Trung Sở hữu)
 
-Để đảm bảo tính liên kết nhóm và sẵn sàng tổng hợp tài liệu, cấu trúc của các màn hình tiếp theo được định vị sẵn:
-- **Mục `S03` & `S04` (TV2 Trương Chí Trung):** Home Feed (Chung/Nhóm ngành) và Member Directory (`US-06`).
-- **Mục `S05` & `S06` (TV3 Nguyễn Phương Khải):** Member Public Profile (`US-05, US-10, US-11`) và Chat Room (`US-12..US-21`).
-- **Mục `S07` & `S08` (TV4 Đỗ Trọng Tín):** My Profile (`US-04, US-11`) và Privacy & Security Settings (`US-07..US-10`).
+> **Mã Màn hình:** `S03`  
+> **User Stories Bao phủ:** `US-05` (Xem thông tin tác giả), `US-11` (Chia sẻ lịch rảnh tham khảo), `US-22..US-37` (Thảo luận cộng đồng, Sự kiện Seminar cựu sinh viên)  
+> **Quyết định Thiết kế Áp dụng:** **`D02`** (Loại bỏ nút nổi FAB ở góc dưới phải để không che khuất bài viết; nút hành động trong thẻ bài viết dùng kiểu `Secondary-Outlined #1B365D` với nhãn **`💬 Nhắn tin trao đổi`**, không dùng nút cam đặc cạnh tranh thị giác và tuyệt đối không có tính năng Booking 1-1).  
+> **Ảnh Minh chứng Giao diện (`assets/figma/s03.png`):**  
+> ![S03 Home Feed](../assets/figma/s03.png)
+
+### 5.1. 6 Mục Đặc tả Kỹ thuật của `S03` (Layout, Components, States, Interactions, Navigation, Constraints)
+
+| Mục Đặc tả | Nội dung Kỹ thuật Chi tiết (`360 × 800 dp`) |
+| :--- | :--- |
+| **1. Layout (Bố cục)** | - Khung dọc `Scaffold` (`360×800dp`, nền `#F8FAFC`).<br>- Trên cùng: `CMP-05 Top-Level AppBar` (`H: 64dp`, nền `#FFFFFF`).<br>- Thân cuộn dọc (`SingleChildScrollView`, `Padding ngang: 16dp`, `Gap dọc: 16dp`):<br>  1. Thanh tạo câu hỏi nhanh (`Quick Discussion Composer Card`, `H: 64dp`, thay thế hoàn toàn FAB theo `D02`).<br>  2. Dải `Filter Chips` ngang (`H: 48dp`, `Gap: 8dp`): `✓ Tất cả Không gian`, `✓ Hola Campus`, `✓ Ngành: SE`, `Hỏi đáp OJT`.<br>  3. Thẻ nổi bật `Official Alumni Seminar Card` (`#1B365D` gradient, `Padding: 16dp`, `Radius: 16dp`).<br>  4. Danh sách `Alumni Mentorship Post Card` (`#FFFFFF`, `Padding: 16dp`, `Radius: 16dp`, viền `1dp #E2E8F0`).<br>- Dưới cùng: `CMP-04 BottomNavigationBar` (`H: 64dp`, Tab 1 `Home` đang Active màu `#F27024`). |
+| **2. Components** | - `CMP-05 AppBar (Variant=Top-Level-Brand)`<br>- `CMP-02 Filter Chip (48dp height, Selected with ✓)`<br>- `CMP-03 Card (Type=Seminar-Banner-Card & Type=Feed-Post-Card)`<br>- `CMP-01 Button (Variant=Primary-CTA 44–48dp trên Seminar Card & Variant=Secondary-Outlined "💬 Nhắn tin trao đổi" 48dp trên Post Card)`<br>- `CMP-04 BottomNavigationBar (ActiveTab=0 Home)` |
+| **3. States (Trạng thái)** | - **Default State:** Hiển thị thẻ Seminar và danh sách bài chia sẻ kinh nghiệm OJT của cựu sinh viên.<br>- **Loading State (`CMP-07`):** Hiển thị 2 khung `Skeleton-Card` xám nhấp nháy khi kéo làm mới (`Pull-to-Refresh`).<br>- **Empty State (`CMP-08`):** Khi chọn bộ lọc chưa có bài viết, hiển thị minh họa trống kèm nút `Đặt câu hỏi đầu tiên` (`48dp`).<br>- **Error State (`CMP-09`):** Hiển thị `Network Error Banner` đầu danh sách kèm nút `↻ Thử lại` (`48dp`) khi mất kết nối mạng. |
+| **4. Interactions** | - Chạm thanh `Đặt câu hỏi cho cựu sinh viên...`: Mở khung soạn thảo bài viết mới.<br>- Chạm `Filter Chip`: Đổi trạng thái chọn (thêm/bớt dấu `✓`) và lọc danh sách bài viết tức thì.<br>- Chạm nút `💬 Nhắn tin trao đổi` trên bài viết của Đặng Minh Tuấn: Mở phòng chat `S06` hoặc hồ sơ `S05`. |
+| **5. Navigation** | - Từ `S01` / `S02` đăng nhập thành công → chuyển vào `S03` (Root Tab 1).<br>- Chạm Avatar/Tên tác giả `Đặng Minh Tuấn` → điều hướng sang `S05 Member Public Profile`.<br>- Chạm nút `💬 Nhắn tin trao đổi` → điều hướng sang `S06 Chat Room`.<br>- Chạm Tab 2 (`Directory`) → `S04`; Tab 3 (`Chat`) → `S06`; Tab 4 (`Profile`) → `S07`. |
+| **6. UI Constraints** | - Không sử dụng `FloatingActionButton` (`D02`).<br>- Mọi chip lọc và nút hành động dưới chân bài viết bắt buộc đạt chiều cao vùng chạm **`48dp`**.<br>- Nội dung bài viết tối đa 4 dòng ở chế độ thu gọn (`maxLines: 4, overflow: TextOverflow.ellipsis`). |
+
+---
+
+## 6. Đặc tả Chi tiết Màn hình `S04`: Member Search & Alumni Directory (TV2 Trương Chí Trung Sở hữu)
+
+> **Mã Màn hình:** `S04`  
+> **User Stories Bao phủ:** `US-06` (Tìm kiếm & Lọc thành viên theo Campus, Ngành, Khóa), `US-05` (Xem tóm tắt hồ sơ cựu sinh viên)  
+> **Quyết định Thiết kế Áp dụng:** **`D04`** (Nâng chiều cao Filter Chip lên `48dp`, cỡ chữ tag kỹ năng `≥ 14sp`, chữ phụ `#595959` đạt tương phản `7.0:1`) & **`D05`** (Thêm dấu tích `✓` vào các Chip đang chọn và nhãn tường minh `[ON]` cạnh công tắc lọc sẵn sàng hỗ trợ).  
+> **Ảnh Minh chứng Giao diện (`assets/figma/s04.png`):**  
+> ![S04 Alumni Directory](../assets/figma/s04.png)
+
+### 6.1. 6 Mục Đặc tả Kỹ thuật của `S04` (Layout, Components, States, Interactions, Navigation, Constraints)
+
+| Mục Đặc tả | Nội dung Kỹ thuật Chi tiết (`360 × 800 dp`) |
+| :--- | :--- |
+| **1. Layout (Bố cục)** | - Khung dọc `Scaffold` (`360×800dp`, nền `#F8FAFC`).<br>- Header tìm kiếm cố định (`#FFFFFF`, `Padding: 16dp`): Tiêu đề `Alumni Directory` (`20sp Bold`) + Huy hiệu `142 Verified Mentors` + Ô tìm kiếm `52dp` (`Backend / Golang / VNG`).<br>- Dải `Multi-Criteria Filter Chips` (`H: 48dp`, cuộn ngang): `✓ Campus: Hola`, `✓ Major: SE`, `✓ Cohort: K12–K16`, `Company ▾`.<br>- Thanh lọc trạng thái hỗ trợ (`H: 48dp`, `#FFFFFF` card strip): Nhãn `Available for OJT Mentorship` + Badge **`[ON]`** + `Switch` màu `#10B981`.<br>- Danh sách thẻ kết quả (`ListView.separated`, `Padding: 16dp`, `Gap: 16dp`): Thẻ 1 (`Đặng Minh Tuấn — K12 SE • Tech Lead @ VNG`), Thẻ 2 (`Lê Hoàng Nam — K15 SE • Senior Backend @ FPT Software`).<br>- Dưới cùng: `CMP-04 BottomNavigationBar` (Tab 2 `Directory` Active). |
+| **2. Components** | - `CMP-02 Search TextField (52dp height, Clear ✕ button 48×48dp)`<br>- `CMP-02 Filter Chip (48dp height, Variant=Selected with ✓ & Unselected)`<br>- `CMP-02 Labeled Switch (Variant=ON with explicit [ON] badge)`<br>- `CMP-03 Card (Type=Alumni-Directory-Card)`<br>- `CMP-01 Button (Row 2 nút 48dp: "💬 Message" Tonal & "View Profile →" Primary/Outlined)` |
+| **3. States (Trạng thái)** | - **Default / Filtered Results State:** Hiển thị 2 thẻ cựu sinh viên khớp bộ lọc `Hola + SE`.<br>- **Loading State (`CMP-07`):** Hiển thị 3 thẻ `Skeleton-Card` khi đang gõ từ khóa tìm kiếm (debounce `300ms`).<br>- **Empty State (`CMP-08`):** Khi không có kết quả khớp bộ lọc, hiển thị icon kính lúp + tiêu đề *"Không tìm thấy Cựu sinh viên phù hợp"* + nút **`Đặt lại bộ lọc (Reset All Filters)`** (`48dp`).<br>- **Error State (`CMP-09`):** Banner báo lỗi kết nối máy chủ tìm kiếm kèm nút `↻ Thử lại`. |
+| **4. Interactions** | - Gõ từ khóa hoặc chạm nút `✕` (`48×48dp`): Cập nhật danh sách kết quả theo thời gian thực.<br>- Chạm `Filter Chip` (`48dp`): Bật/tắt tiêu chí lọc Campus/Major/Cohort.<br>- Gạt công tắc `Available for Mentorship`: Chuyển đổi giữa `[ON]` và `[OFF]`. |
+| **5. Navigation** | - Chạm vào thẻ `Đặng Minh Tuấn` hoặc nút `View Profile →` → Điều hướng sang **`S05 Member Public Profile`**.<br>- Chạm nút `💬 Message` trên thẻ → Điều hướng trực tiếp sang **`S06 Chat Room`**. |
+| **6. UI Constraints** | - Tất cả Filter Chips bắt buộc có `minHeight: 48dp` và hiển thị dấu `✓` khi được chọn (`D04`, `D05`).<br>- Khi mở rộng màn hình lên `412dp` hoặc `≥600dp`, danh sách thẻ tự động chuyển từ 1 cột sang lưới `GridView` 2 cột. |
+
+---
+
+## 7. Đặc tả Chi tiết Màn hình `S05`: Member Public Profile & Mentorship Connect (TV3 Nguyễn Phương Khải Sở hữu)
+
+> **Mã Màn hình:** `S05`  
+> **User Stories Bao phủ:** `US-05` (Xem hồ sơ công khai chi tiết), `US-11` (Xem đường dẫn lịch rảnh Google Calendar tham khảo), `US-10` (Chặn người dùng làm phiền)  
+> **Quyết định Thiết kế Áp dụng:** **`D01`** (Chỉ giữ 1 thanh AppBar duy nhất cao `56dp`, đưa nút `🚫 Chặn người dùng này` màu đỏ `#DC2626` xuống cuối trang kèm Dialog xác nhận), **`D07` & `CD-03`** (**Loại bỏ hoàn toàn tính năng Booking 1-1**; đặt nút **`💬 Nhắn tin trao đổi (Direct Message)`** làm Primary CTA màu cam `#F27024` cao `56dp`, và định vị Google Calendar `US-11` đúng bản chất là nút phụ viền Navy **`📅 Xem Lịch rảnh tham khảo (Google Calendar)`** cao `48dp`).  
+> **Ảnh Minh chứng Giao diện (`assets/figma/s05.png`):**  
+> ![S05 Member Public Profile](../assets/figma/s05.png)
+
+### 7.1. 6 Mục Đặc tả Kỹ thuật của `S05` (Layout, Components, States, Interactions, Navigation, Constraints)
+
+| Mục Đặc tả | Nội dung Kỹ thuật Chi tiết (`360 × 800 dp`) |
+| :--- | :--- |
+| **1. Layout (Bố cục)** | - Khung dọc `Scaffold` (`360×800dp`, nền `#F8FAFC`).<br>- Trên cùng: **1 thanh `CMP-05 Detail AppBar` duy nhất** (`H: 56dp`, nút `← Back` `48×48dp`, tiêu đề `Hồ sơ Cựu sinh viên`, nút `Share` `48×48dp` — tuân thủ `D01`).<br>- Thân cuộn dọc (`SingleChildScrollView`, `Padding: 16dp`, `Gap: 16dp`):<br>  1. **Mentor Hero Card (`#FFFFFF`, `Padding: 16dp`, `Radius: 16dp`):** Avatar `68dp` có chấm xanh online + Tên `Đặng Minh Tuấn` (`20sp Bold`) + Huy hiệu `✓ Cựu SV K12 • Hola` (`#ECFDF5` nền, `#047857` chữ) + Chức danh `Tech Lead @ VNG Corporation (ZaloPay)` + Bio hỗ trợ OJT + Hộp 3 chỉ số uy tín (`42 Lời khuyên hữu ích` \| `K12 Tech Lead` \| `100% Xác thực FPT`).<br>  2. **Khối Hành động Chính/Phụ (Action Hierarchy Block):**<br>     - **Nút CTA Chính (`H: 56dp`, rộng `Fill`, màu cam `#F27024`):** **`💬 Nhắn tin trao đổi (Direct Message)`** + chú thích phụ *"Bắt đầu cuộc trò chuyện định hướng OJT và review CV"*.<br>     - **Nút Hành động Phụ (`H: 48dp`, rộng `Fill`, viền `1.5dp #1B365D`, nền `#EFF6FF`):** **`📅 Xem Lịch rảnh tham khảo (Google Calendar)`** (`US-11`) + chú thích *"Xem khung giờ rảnh/bận để chủ động nhắn tin hẹn trước"*.<br>  3. **Card Chủ đề Sẵn sàng Chia sẻ (`Padding: 16dp`):** 3 gạch đầu dòng chủ đề cố vấn (Review CV OJT, Kinh nghiệm phỏng vấn Backend Golang/Kafka, Góp ý Capstone Microservices) + Dải `Skill Tags` (`14sp`: `Golang`, `Microservices`, `Kafka`, `System Design`, `Docker`).<br>  4. **Card Kinh nghiệm Làm việc (`Padding: 16dp`):** Timeline công tác tại VNG Corporation (`2021 – Nay`) và FPT Software (`2018 – 2021`).<br>  5. **Khu vực An toàn & Chặn Người dùng (`Safety Zone — US-10`):** Nút viền đỏ **`🚫 Chặn người dùng này (US-10)`** (`H: 48dp`, nền `#FEF2F2`, viền `1.5dp #DC2626`, chữ `#DC2626 Bold 14sp`). |
+| **2. Components** | - `CMP-05 AppBar (Variant=Detail-Back)`<br>- `CMP-03 Card (Mentor Hero, Mentorship Topics, Career Timeline)`<br>- `CMP-01 Button (Variant=Primary-CTA 56dp "💬 Nhắn tin trao đổi", Variant=Secondary-Outlined 48dp "📅 Xem Lịch rảnh tham khảo", Variant=Destructive-Outlined 48dp "🚫 Chặn người dùng này")`<br>- `CMP-06 Block Confirmation Dialog` (Overlay khi bấm nút Chặn) |
+| **3. States (Trạng thái)** | - **Default State:** Hiển thị đầy đủ hồ sơ công khai, nút `Nhắn tin trao đổi` và nút `Xem Lịch rảnh tham khảo`.<br>- **Loading State (`CMP-07`):** Khung `Skeleton-Profile` khi đang tải dữ liệu cựu sinh viên.<br>- **No Calendar Link State (`Empty Variant`):** Nếu thành viên chưa cập nhật link lịch ở `S07`, nút `Xem Lịch rảnh tham khảo` chuyển sang trạng thái `Disabled` (`#F1F5F9`, chữ `#595959`: *"Chưa đính kèm lịch Google Calendar"*), chỉ giữ nút `💬 Nhắn tin trao đổi`.<br>- **Block Confirmation Dialog State (`CMP-06 Overlay`):** Hiển thị hộp thoại xác nhận *"Chặn Đặng Minh Tuấn?"* với 2 nút `Hủy` (`48dp`) và `Xác nhận Chặn` (`48dp`, `#DC2626`). |
+| **4. Interactions** | - Chạm **`💬 Nhắn tin trao đổi (Direct Message)`**: Chuyển ngay sang màn hình `S06 Chat Room` kèm ngữ cảnh chủ đề OJT.<br>- Chạm **`📅 Xem Lịch rảnh tham khảo (Google Calendar)`**: Gọi `url_launcher` mở Custom Tab / WebView hiển thị lịch rảnh Google Calendar của cựu sinh viên (`US-11`).<br>- Chạm **`🚫 Chặn người dùng này`**: Mở `CMP-06 Confirmation Dialog` → Bấm `Xác nhận Chặn` sẽ thêm vào danh sách chặn ở `S08` và quay về `S04`. |
+| **5. Navigation** | - Nhận điều hướng từ `S03 Home Feed` hoặc `S04 Directory`.<br>- Nút `← Back` (`48×48dp`): Quay lại màn hình trước đó (`Navigator.pop`).<br>- Nút `💬 Nhắn tin trao đổi`: Điều hướng sang `S06`. |
+| **6. UI Constraints** | - Tuyệt đối **không có 2 thanh Back header chồng nhau** (`D01`).<br>- Tuyệt đối **không có form đặt lịch hẹn 1-1 hay chấm sao đánh giá** (`D07`).<br>- Nút `Chặn người dùng này` phải tách biệt ở cuối trang để tránh bấm nhầm với các nút kết nối. |
+
+---
+
+## 8. Đặc tả Chi tiết Màn hình `S06`: Direct & Group Mentorship Chat Room (TV3 Nguyễn Phương Khải Sở hữu)
+
+> **Mã Màn hình:** `S06`  
+> **User Stories Bao phủ:** `US-12..US-21` (Nhắn tin trao đổi trực tiếp 1-1, đính kèm tài liệu CV, xem trạng thái trực tuyến/đã xem), `US-05` (Xem nhanh hồ sơ), `US-10` (Chặn người dùng từ menu phòng chat), `US-11` (Mở nhanh lịch rảnh tham khảo)  
+> **Quyết định Thiết kế Áp dụng:** **`CD-04`** (Gắn thanh `Sticky Mentorship Context Banner` ở đầu phòng chat + thẻ đính kèm file **`📄 CV_TruongChiTrung_K19_SE.pdf`** + dải `Quick Icebreaker Chips` cao `48dp` phía trên ô nhập tin nhắn; **bỏ hoàn toàn card xác nhận đặt lịch hẹn 1-1**).  
+> **Ảnh Minh chứng Giao diện (`assets/figma/s06.png`):**  
+> ![S06 Direct Mentorship Chat Room](../assets/figma/s06.png)
+
+### 8.1. 6 Mục Đặc tả Kỹ thuật của `S06` (Layout, Components, States, Interactions, Navigation, Constraints)
+
+| Mục Đặc tả | Nội dung Kỹ thuật Chi tiết (`360 × 800 dp`) |
+| :--- | :--- |
+| **1. Layout (Bố cục)** | - Khung dọc `Scaffold` (`360×800dp`, `resizeToAvoidBottomInset: true`, nền `#F8FAFC`).<br>- **Sticky Top Chat AppBar (`H: 60dp`, `#FFFFFF`):** Nút `← Back` (`48×48dp`) + Avatar `40dp` (`DT`) + Tên `Đặng Minh Tuấn ✓ K12 SE` + Phụ đề xanh lá `● Trực tuyến • Tech Lead @ VNG` + Nút icon Lịch `📅` (`48×48dp`) + Nút menu an toàn `⋮` (`48×48dp`).<br>- **Sticky Mentorship Context Banner (`#EFF6FF`, `Padding: 12dp`):** `🎯 Chủ đề trao đổi: Hướng dẫn CV OJT & Kiến trúc Microservices` + Link `Xem Profile →` (`#F27024`).<br>- **Vùng Danh sách Tin nhắn (`Expanded ListView`, `Padding: 16dp`, `Gap: 12dp`):**<br>  1. Nhãn ngày `Hôm nay, 09:40` giữa màn hình.<br>  2. Bong bóng tin nhắn đi của sinh viên Trung (căn phải, nền `#1B365D`, chữ trắng `14sp`, bo góc `16dp/4dp`) + trạng thái `09:41 • ✓✓ Đã xem`.<br>  3. **Thẻ File Đính kèm CV (`CV Attachment Card`, căn phải, nền `#FFFFFF`, viền `#CBD5E1`, `Radius: 12dp`):** Icon PDF đỏ + Tên file **`CV_TruongChiTrung_K19_SE.pdf`** (`13sp Bold`) + `1.4 MB • PDF`.<br>  4. Bong bóng tin nhắn đến của Mentor Tuấn (căn trái, nền `#FFFFFF`, viền `#E2E8F0`, chữ `#1A1A1A 14sp`) nhận xét về kiến trúc Kafka & hẹn tối thứ Bảy trao đổi tiếp.<br>- **Dải Gợi ý Câu hỏi Mở đầu (`Quick Icebreaker Chips`, `H: 48dp`, cuộn ngang):** `📄 Gửi link GitHub dự án`, `💡 Hỏi về bài test OJT tại VNG`, `❓ Xin kinh nghiệm phỏng vấn`.<br>- **Thanh Soạn thảo Tin nhắn Dưới cùng (`Bottom Composer Bar`, `H: 64dp`, `#FFFFFF`):** Nút đính kèm file `+` (`48×48dp`) + Ô nhập tròn `Nhập tin nhắn gửi anh Tuấn...` (`H: 44dp`) + Nút Gửi tròn cam `#F27024` (`48×48dp`). |
+| **2. Components** | - `CMP-05 AppBar (Variant=Chat-Room-Header)`<br>- `CMP-03 Card (Variant=Context-Banner & Variant=File-Attachment-Card)`<br>- `CMP-02 Icebreaker Suggestion Chips (48dp touch height)`<br>- `CMP-02 Chat Composer Input + 48×48dp Icon Buttons`<br>- `CMP-06 Block Confirmation Dialog` (khi chọn Chặn từ menu `⋮`) |
+| **3. States (Trạng thái)** | - **Active Thread State (Default):** Hiển thị cuộc hội thoại và file CV đính kèm.<br>- **Empty Conversation State (`CMP-08`):** Khi mới bấm `Nhắn tin trao đổi` lần đầu từ `S05`, hiển thị hộp gợi ý mẫu câu chào hỏi đàn anh/chị khóa trên.<br>- **Loading / Sending State (`CMP-07`):** Nhãn `Đang gửi...` kèm icon đồng hồ dưới bong bóng tin nhắn hoặc `Đang tải lịch sử trò chuyện...`.<br>- **Message Send Error State (`CMP-09`):** Khi rớt mạng lúc gửi tin nhắn, hiện nhãn đỏ `⚠️ Gửi thất bại • Chạm để gửi lại` (`48dp` hit area) ngay dưới bong bóng tin nhắn. |
+| **4. Interactions** | - Chạm vào một `Icebreaker Chip` (`48dp`): Tự động điền nội dung câu hỏi vào ô nhập tin nhắn.<br>- Chạm nút `+` (`48×48dp`): Đính kèm file PDF CV hoặc ảnh chụp kiến trúc.<br>- Chạm vào thẻ `CV_TruongChiTrung_K19_SE.pdf`: Mở trình xem trước tài liệu PDF.<br>- Chạm menu `⋮` → Chọn `🚫 Chặn người dùng`: Mở `CMP-06 Block Confirmation Dialog` (`US-10`). |
+| **5. Navigation** | - Mở từ nút `💬 Nhắn tin trao đổi` trên `S05`, `S04`, `S03` hoặc từ Tab 3 (`Chat`).<br>- Chạm `Xem Profile →` trên Context Banner hoặc chạm Avatar trên AppBar → Mở lại `S05 Member Public Profile`. |
+| **6. UI Constraints** | - Tất cả các nút trên AppBar, Icebreaker Chips và Composer Bar đều đạt vùng chạm tối thiểu **`48 × 48 dp`**.<br>- Bong bóng tin nhắn giới hạn chiều rộng tối đa `78%` chiều ngang màn hình (`maxWidth: 280dp` trên màn `360dp`) để dễ phân biệt tin nhắn đi và đến. |
+
+---
+
+## 9. Đặc tả Chi tiết Màn hình `S07`: My Profile, Edit & Google Calendar Schedule + Error State (TV4 Đỗ Trọng Tín Sở hữu)
+
+> **Mã Màn hình:** `S07`  
+> **User Stories Bao phủ:** `US-04` (Cập nhật thông tin hồ sơ cá nhân), `US-11` (Thêm đường dẫn lịch Google Calendar cá nhân vào Profile để người khác xem thời gian rảnh/bận)  
+> **Quyết định Thiết kế Áp dụng:** **`D03`** (Xóa sạch toàn bộ nhãn mã kỹ thuật `US-xx` bị lộ trên giao diện; hiển thị đúng thông tin `Trương Chí Trung • Cohort K19 • SE193059`) & **`D06`** (Thiết kế trạng thái **Network Error Banner** bảo lưu dữ liệu form kèm nút **`↻ Retry Save`** cao `48dp` và trạng thái **Inline Validation Error** viền đỏ `#DC2626` cho ô nhập đường dẫn Google Calendar).  
+> **Ảnh Minh chứng Giao diện (`assets/figma/s07.png`):**  
+> ![S07 My Profile & Error State](../assets/figma/s07.png)
+
+### 9.1. 6 Mục Đặc tả Kỹ thuật của `S07` (Layout, Components, States, Interactions, Navigation, Constraints)
+
+| Mục Đặc tả | Nội dung Kỹ thuật Chi tiết (`360 × 800 dp`) |
+| :--- | :--- |
+| **1. Layout (Bố cục)** | - Khung dọc `Scaffold` (`360×800dp`, nền `#F8FAFC`).<br>- Trên cùng: `CMP-05 AppBar` (`H: 56dp`, tiêu đề `My Profile & Mentorship` bên trái + nút pill `Privacy & Security →` cao `48dp` bên phải dẫn sang `S08`).<br>- **Đầu trang cuộn (`CMP-09 Network Error Banner`, nền `#FDF3F2`, viền `1.5dp #DC2626`, `Padding: 12dp`):** Icon `⚠️` + Thông báo *"Unable to sync changes. Network connection timed out while updating Google Calendar link."* + Nút đỏ **`↻ Retry Save`** (`H: 48dp`).<br>- **Card 1 — Locked Academic Identity (`#FFFFFF`, `Padding: 16dp`):** Avatar `56dp` (`TC`) + Tên `Trương Chí Trung` (`18sp Bold`) + Badge `✓ Verified FPT Student` + Hộp thông tin học vụ khóa cứng: `🔒 Academic ID: Cohort K19 • SE193059 • Software Engineering • Hola Campus`.<br>- **Card 2 — Editable Career & Bio Form (`US-04`, `Padding: 16dp`):** Ô nhập `Headline / OJT Goal` (`52dp`), Ô nhập `GitHub / Portfolio Link` (`52dp`), Bộ chọn `Skill Tags` (`Golang`, `Java`, `Docker`, `+ Add Skill` — chạm `48dp`).<br>- **Card 3 — Google Calendar Schedule Link (`US-11`, viền `#DC2626` khi báo lỗi):** Ô nhập đường dẫn lịch cá nhân đang hiển thị trạng thái lỗi (`http://calendar.google.com/my-link`) + dòng báo lỗi đỏ `#DC2626` ngay bên dưới + Nút cam **`Save Profile Changes`** (`H: 52dp`, `#F27024`).<br>- Dưới cùng: `CMP-04 BottomNavigationBar` (Tab 4 `Profile` Active). |
+| **2. Components** | - `CMP-09 Error State (Variant=Network-Error-Banner with 48dp Retry Save button & Variant=Inline-Field-Error)`<br>- `CMP-03 Card (Academic Identity Card & Form Cards)`<br>- `CMP-02 Text Field (Variant=Default & Variant=Validation-Error #DC2626)`<br>- `CMP-01 Button (Variant=Primary-CTA 52dp "Save Profile Changes")` |
+| **3. States (Trạng thái)** | - **Default / Clean Edit State:** Các ô nhập hợp lệ, viền `#CBD5E1`, không có banner lỗi.<br>- **Inline Validation Error State (`D06`):** Khi dán URL không đúng chuẩn `https://calendar.google.com/...` hoặc `https://calendar.app.google/...`, viền ô input chuyển sang `2dp #DC2626` kèm thông báo hướng dẫn sửa.<br>- **Network Error & Recovery State (`D06`):** Khi mất mạng lúc bấm lưu, giữ nguyên toàn bộ nội dung vừa gõ trong bộ nhớ đệm (`FormState` preserved) và hiện `Network Error Banner` kèm nút `↻ Retry Save` (`48dp`).<br>- **Saving / Success State:** Hiện `SnackBar` xanh lá `#10B981` *"Đã lưu hồ sơ và cập nhật đường dẫn lịch thành công!"*. |
+| **4. Interactions** | - Chỉnh sửa Bio, Kỹ năng, Link lịch Google Calendar.<br>- Chạm nút **`↻ Retry Save`** (`48dp`) trên Banner lỗi mạng: Gửi lại yêu cầu cập nhật hồ sơ mà không cần gõ lại dữ liệu.<br>- Chạm nút **`Privacy & Security →`** (`48dp`): Chuyển sang màn hình `S08`. |
+| **5. Navigation** | - Mở từ Tab 4 (`Profile`) trên `BottomNavigationBar`.<br>- Điều hướng sang `S08 Privacy & Security Settings` khi bấm nút cài đặt bảo mật. |
+| **6. UI Constraints** | - Tuyệt đối không hiển thị các chuỗi mã `US-04`, `US-11` trên giao diện người dùng (`D03`).<br>- Thông tin học vụ đã xác thực qua FPT SSO (`Khóa`, `MSSV`, `Campus`) ở chế độ chỉ đọc (`Read-only`) để đảm bảo tính xác thực của cộng đồng. |
+
+---
+
+## 10. Đặc tả Chi tiết Màn hình `S08`: Privacy Toggles, Security & Blocked Users List (TV4 Đỗ Trọng Tín Sở hữu)
+
+> **Mã Màn hình:** `S08`  
+> **User Stories Bao phủ:** `US-09` (Cài đặt quyền riêng tư ẩn/hiện từng trường thông tin cá nhân), `US-07` (Đổi mật khẩu tài khoản), `US-10` (Xem danh sách người dùng đã chặn & Bỏ chặn), `US-08` (Đăng xuất an toàn khỏi thiết bị)  
+> **Quyết định Thiết kế Áp dụng:** **`D05`** (Tất cả 5 công tắc Switch trong mục Privacy đều có kèm huy hiệu chữ **`[ON]` / `[OFF]`** tường minh ngay bên cạnh để không phụ thuộc duy nhất vào màu sắc theo WCAG 2.2 SC 1.4.1) & **`D03`** (Bổ sung đầy đủ khối **Security & Moderation** chứa mục **Change Account Password `US-07`** và **Blocked Users (2 accounts) • Manage & Unblock `US-10`**).  
+> **Ảnh Minh chứng Giao diện (`assets/figma/s08.png`):**  
+> ![S08 Privacy & Security Settings](../assets/figma/s08.png)
+
+### 10.1. 6 Mục Đặc tả Kỹ thuật của `S08` (Layout, Components, States, Interactions, Navigation, Constraints)
+
+| Mục Đặc tả | Nội dung Kỹ thuật Chi tiết (`360 × 800 dp`) |
+| :--- | :--- |
+| **1. Layout (Bố cục)** | - Khung dọc `Scaffold` (`360×800dp`, nền `#F8FAFC`).<br>- Trên cùng: `CMP-05 Detail AppBar` (`H: 56dp`, nút `← Back` `48×48dp` quay về `S07`, tiêu đề `Privacy & Security Settings`).<br>- Thân cuộn dọc (`SingleChildScrollView`, `Padding: 16dp`, `Gap: 16dp`):<br>  1. **Card 1 — Field-Level Privacy Controls (`US-09`, `#FFFFFF`, `Padding: 16dp`, `Radius: 16dp`):** Gồm 5 hàng công tắc (`H: 56dp`/hàng), mỗi hàng bên trái là Tiêu đề + Mô tả phụ (`12–14sp #595959`), bên phải là **Huy hiệu chữ `[ON]` (`#ECFDF5`/`#047857`) hoặc `[OFF]` (`#F1F5F9`/`#595959`) + Switch**:<br>     - Hàng 1: `Show Current Company & Role` → **`[ON]`** + Switch bật.<br>     - Hàng 2: `Show Personal Email Address` → **`[OFF]`** + Switch tắt.<br>     - Hàng 3: `Show Phone Number` → **`[OFF]`** + Switch tắt.<br>     - Hàng 4: `Open for OJT Mentorship & Calendar View` → **`[ON]`** + Switch bật.<br>     - Hàng 5: `Allow Direct Messages from All Cohorts` → **`[ON]`** + Switch bật.<br>  2. **Card 2 — Security & Moderation (`US-07, US-10`, `#FFFFFF`, `Padding: 16dp`):**<br>     - Hàng 1 (`H: 56dp`): `🔑 Change Account Password` + phụ đề *"Last updated 14 days ago"* + mũi tên `›` (`US-07`).<br>     - Hàng 2 (`H: 56dp`): `🚫 Blocked Users (2 accounts)` + phụ đề *"Tran Van X (K17), Nguyen Minh B (K18)"* + nút pill **`Manage & Unblock →`** (`48dp` hit area, `US-10`).<br>  3. **Khối Đăng xuất Cuối trang (`Session Control Footer — US-08`):** Nút viền đỏ **`🚪 Log Out of Account`** (`H: 52dp`, rộng `Fill`, nền `#FEF2F2`, viền `1.5dp #DC2626`, chữ `#DC2626 Bold 15sp`). |
+| **2. Components** | - `CMP-05 AppBar (Variant=Detail-Back)`<br>- `CMP-02 Labeled Privacy Switch Row (56dp height, explicit [ON]/[OFF] text badge)`<br>- `CMP-03 Card (Privacy Card & Security Card)`<br>- `CMP-01 Button (Variant=Destructive-Outlined 52dp "🚪 Log Out of Account")` |
+| **3. States (Trạng thái)** | - **Default State:** Hiển thị trạng thái hiện tại của 5 công tắc (`3 [ON]`, `2 [OFF]`) và số lượng tài khoản bị chặn (`2 accounts`).<br>- **Unblock Management Modal State (`US-10`):** Khi bấm `Manage & Unblock →`, hiển thị danh sách 2 người bị chặn kèm nút `Bỏ chặn (Unblock)` (`48dp`) cho từng người.<br>- **Sync Error State (`CMP-09`):** Nếu gạt Switch khi mất mạng, công tắc tự động hoàn trả về vị trí cũ và hiện thông báo lỗi kèm nút `Thử lại`.<br>- **Logout Confirmation Dialog (`CMP-06`):** Hộp thoại xác nhận đăng xuất tránh bấm nhầm. |
+| **4. Interactions** | - Chạm vào bất kỳ hàng Switch nào (`H: 56dp`): Đảo trạng thái Bật/Tắt và cập nhật ngay nhãn chữ giữa **`[ON]`** và **`[OFF]`**.<br>- Chạm `🔑 Change Account Password`: Mở luồng đổi mật khẩu (`S02 Mode B`).<br>- Chạm `Manage & Unblock →`: Mở danh sách bỏ chặn người dùng (`US-10`).<br>- Chạm `🚪 Log Out of Account`: Xóa token phiên đăng nhập và điều hướng về `S01 Login`. |
+| **5. Navigation** | - Mở từ nút `Privacy & Security →` trên `S07 My Profile`.<br>- Nút `← Back` (`48×48dp`): Quay về `S07`.<br>- Nút `Log Out`: Điều hướng `pushAndRemoveUntil` về `S01 Login`. |
+| **6. UI Constraints** | - **Bắt buộc 100% Switch phải có nhãn chữ `[ON]` / `[OFF]`** đi kèm để đạt tiêu chí **CRITICAL B4** của UI Simplicity Checklist.<br>- Mỗi hàng cài đặt cao tối thiểu `56dp` để người dùng không chạm nhầm giữa các công tắc liền kề. |
