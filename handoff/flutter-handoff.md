@@ -931,7 +931,7 @@ class _S05AlumniDetailScreenState extends State<S05AlumniDetailScreen> {
     // Trong thực tế gọi url_launcher: launchUrl(Uri.parse(alumni.calendarUrl))
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Opening Google Calendar booking slot (Tomorrow, 2:00 PM)...'),
+        content: Text('Opening Google Calendar public schedule link...'),
       ),
     );
   }
@@ -1374,7 +1374,7 @@ class _S06ChatRoomScreenState extends State<S06ChatRoomScreen> {
               minHeight: AppDimens.minTouchTarget,
             ),
             icon: const Icon(Icons.calendar_month, color: AppColors.primaryNavy),
-            tooltip: 'Open Google Calendar Booking (US-11)',
+            tooltip: 'View Google Calendar Schedule (US-11)',
             onPressed: () {},
           ),
           PopupMenuButton<String>(
@@ -2280,7 +2280,7 @@ class _PrivacySecurityScreenState extends State<PrivacySecurityScreen> {
                   ),
                   _buildPrivacySwitchTile(
                     title: 'Open for 1-on-1 Mentorship',
-                    subtitle: 'Display Google Calendar booking link on profile',
+                    subtitle: 'Display Google Calendar link on profile',
                     value: _openMentorship,
                     onChanged: (v) => setState(() => _openMentorship = v),
                   ),
