@@ -9,6 +9,7 @@
 > **Môn học:** PRM323 — Cross-Platform Application Development  
 > **Nhóm thực hiện:** **Nhóm 4** — Lớp PRM323 Đại học FPT TP. Hồ Chí Minh  
 > **Link Figma chính thức:** [PRM323 - Lab 2 - F-Alumni - Nhom 4](https://www.figma.com/design/PPdvsVA0O63HEHTQkxBQX0/PRM323---Lab-2---F-Alumni---Nhom-4?node-id=94-805&t=sDUpjW1KFg82UUlH-0)  
+> **Interactive Slide Deck (Trình bày 10 phút):** [slides.html](slides.html) (Mở trực tiếp trên Chrome/Edge, phím mũi tên & phím F để toàn màn hình)  
 > **Căn cứ Quy chuẩn:** Đề Lab 2 (12 trang), Bộ chuẩn [PRM393 UI/UX Material](https://prm393-material.web.app/), Bộ 12 trường Persona, Quality Gates P0–P5, và 20 tiêu chí UI Checklist.
 
 ---
@@ -45,6 +46,7 @@ Nhóm 4 phân chia công việc theo đúng cấu trúc: **Mỗi thành viên ph
 
 ```
 UI-UX/
+├── slides.html                    # [Interactive Slide Deck] 12 slide thuyết trình trực tiếp trên trình duyệt
 ├── README.md                      # Tài liệu tổng quan dự án & Bảng phân công Nhóm 4 (TV1 quản lý)
 ├── phan-cong-nhom4.md             # Bản phân công công việc chi tiết 4 thành viên (Cân bằng 25%)
 │

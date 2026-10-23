@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRM323 Lab 2 · Presentation Slide Deck · FPT Alumni Connect (Nhóm 4)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1B365D;       /* FPT Navy */
+      --primary-dark: #0F1E36;
+      --secondary: #F27024;     /* FPT Orange */
+      --secondary-light: #FFF4ED;
+      --accent-green: #10B981;
+      --accent-red: #DC2626;
+      --surface: #FFFFFF;
+      --surface-subtle: #F8FAFC;
+      --surface-card: #FFFFFF;
+      --border: #E2E8F0;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --font-heading: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0B1120;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Top Control Bar */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+      color: #F8FAFC;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      background: var(--secondary);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .project-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #E2E8F0;
+    }
+
+    .presenter-pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(242, 112, 36, 0.2);
+      color: #FB923C;
+      border: 1px solid rgba(242, 112, 36, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .controls-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .timer-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
+
+    .timer-badge:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-icon {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #F8FAFC;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+      color: #FFFFFF;
+    }
+
+    /* Presentation Slide Frame (16:9 Aspect Ratio) */
+    .slide-stage {
+      position: relative;
+      width: 95vw;
+      max-width: 1440px;
+      height: calc(95vw * 9 / 16);
+      max-height: 810px;
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      margin-top: 52px;
+    }
+
+    @media (max-height: 900px) {
+      .slide-stage {
+        height: calc(88vh);
+        width: calc(88vh * 16 / 9);
+      }
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 36px 44px 32px;
+      display: none;
+      flex-direction: column;
+      background: #FFFFFF;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 14px;
+    }
+
+    .slide-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slide-number {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .slide-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .slide-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .slide-speaker-tag {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .slide-speaker-tag.tv2 {
+      background: #FFF7ED;
+      border-color: #FDBA74;
+      color: #C2410C;
+    }
+
+    /* Slide Body Layouts */
+    .slide-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      min-height: 0;
+    }
+
+    .slide-body.full-width {
+      grid-template-columns: 1fr;
+    }
+
+    .slide-body.equal-columns {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .slide-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .slide-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-right img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .img-grid-2 .img-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .img-grid-2 img {
+      max-height: 85%;
+    }
+
+    .img-label {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .img-label.before {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .img-label.after {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    /* Content Cards and Badges */
+    .card-block {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+
+    .card-block.highlight {
+      background: #F0FDF4;
+      border-color: #86EFAC;
+    }
+
+    .card-block.accent {
+      background: #EFF6FF;
+      border-color: #BFDBFE;
+    }
+
+    .card-block.warning {
+      background: #FFFBEB;
+      border-color: #FDE68A;
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bullet-list li {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .bullet-list li::before {
+      content: "•";
+      color: var(--secondary);
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .bullet-list li strong {
+      color: var(--primary);
+    }
+
+    .evidence-bar {
+      margin-top: auto;
+      background: #F1F5F9;
+      border-left: 4px solid var(--secondary);
+      padding: 8px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .evidence-bar code {
+      background: #E2E8F0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--primary);
+    }
+
+    /* Tables */
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    .mini-table th, .mini-table td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .mini-table th {
+      background: var(--surface-subtle);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .badge-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    .badge-pill.accept { background: #DCFCE7; color: #166534; }
+    .badge-pill.modify { background: #FEF3C7; color: #92400E; }
+    .badge-pill.reject { background: #FEE2E2; color: #991B1B; }
+
+    /* Bottom Status & Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .slide-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dot.active {
+      background: var(--secondary);
+      width: 24px;
+      border-radius: 10px;
+    }
+
+    .dot.tv2 {
+      border: 1px solid #F97316;
+    }
+
+    .kb-hint {
+      font-size: 12px;
+      color: #94A3B8;
+    }
+
+    .kb-hint kbd {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #F8FAFC;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Presentation Controls -->
+  <header class="top-bar">
+    <div class="brand-section">
+      <div class="brand-logo">PRM323</div>
+      <div class="project-name">FPT Alumni Connect · Nhóm 4</div>
+      <div id="presenterPill" class="presenter-pill">TV1: Võ Quang Tâm</div>
+    </div>
+
+    <div class="controls-section">
+      <div id="timerBadge" class="timer-badge" title="Bấm để Bắt đầu/Tạm dừng đếm ngược 10 phút">
+        <span>⏱️</span>
+        <span id="timerDisplay">10:00</span>
+      </div>
+      <button id="btnFullscreen" class="btn-icon" title="Toàn màn hình (phím F)">
+        <span>⛶</span> Toàn màn hình
+      </button>
+      <a href="https://github.com/F-Alumni/UI-UX" target="_blank" class="btn-icon" style="text-decoration:none;">
+        <span>📂</span> GitHub
+      </a>
+      <a href="https://www.figma.com/design/PPdvsVA0O63HEHTQkxBQX0/PRM323---Lab-2---F-Alumni---Nhom-4?node-id=94-805&t=sDUpjW1KFg82UUlH-0" target="_blank" class="btn-icon" style="text-decoration:none; background: #0D9488;">
+        <span>🎨</span> Figma 6 Pages
+      </a>
+    </div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main class="slide-stage">
+
+    <!-- ==================== SLIDE 01 ==================== -->
+    <div class="slide active" data-slide="1" data-presenter="TV1 (Võ Quang Tâm)" data-role="tv1">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 01 / 12</div>
+          <h1 class="slide-title">Project Overview & Đội ngũ Thực hiện (25%/người)</h1>
+          <div class="slide-subtitle">FPT Alumni Connect — Nền tảng Kết nối & Định hướng OJT Sinh viên - Cựu sinh viên ĐH FPT</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV1: Võ Quang Tâm (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block accent">
+            <div class="card-title">📌 Bối cảnh Bài toán Thực tế</div>
+            <ul class="bullet-list">
+              <li><strong>84.2% Sinh viên năm 3:</strong> Gặp khó khăn khi tìm đàn anh cựu SV cùng ngành để xin review CV thực tập OJT và phỏng vấn thử. Group Facebook thường bị trôi bài, nhiều quảng cáo rác.</li>
+              <li><strong>100% Cựu sinh viên (Alumni):</strong> Sẵn sàng hỗ trợ đàn em nhưng sợ bị lộ số điện thoại cá nhân và bị làm phiền ngoài giờ làm việc.</li>
+              <li><strong>Giải pháp FPT Alumni Connect:</strong> Mạng xã hội chuyên biệt cho 5 Campus FPT, chia sẻ <strong>Google Calendar Link</strong> (`US-11`), Chat trao đổi và bộ lọc danh bạ thông minh.</li>
+            </ul>
+          </div>
+
+          <div class="card-block">
+            <div class="card-title">👥 Ma trận Phân công Cân bằng 25% (4 Thành viên)</div>
+            <table class="mini-table">
+              <tr>
+                <th>Thành viên</th>
+                <th>Vai trò Trách nhiệm Chính</th>
+                <th>2 Màn hình Sở hữu</th>
+              </tr>
+              <tr>
+                <td><strong>TV1: Võ Quang Tâm</strong> (SE192621)</td>
+                <td>UX Research, Persona 12 trường, IA, User Flow</td>
+                <td><code>S01 Login</code>, <code>S02 Verify</code></td>
+              </tr>
+              <tr style="background:#FFF7ED;">
+                <td><strong>TV2: Trương Chí Trung</strong> (SE193059) ⭐</td>
+                <td>AI Prompting (Stitch), AI Critique, 3 Iterations</td>
+                <td><code>S03 Home</code>, <code>S04 Directory</code></td>
+              </tr>
+              <tr>
+                <td><strong>TV3: Nguyễn Phương Khải</strong> (SE183590)</td>
+                <td>Design System Tokens, 9 Nhóm Component Auto Layout</td>
+                <td><code>S05 Profile</code>, <code>S06 Chat</code></td>
+              </tr>
+              <tr>
+                <td><strong>TV4: Đỗ Trọng Tín</strong> (SE190218)</td>
+                <td>Interactive Prototype 3 Flows, A11y & Flutter Handoff</td>
+                <td><code>S07 My Profile</code>, <code>S08 Privacy</code></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>README.md</code>
+            <code>phan-cong-nhom4.md</code>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <img src="assets/figma/s03.png" alt="FPT Alumni Connect Home Feed" style="max-height: 90%;">
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">FPT Alumni Connect · 360×800dp Mobile Standard</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 02 ==================== -->
+    <div class="slide" data-slide="2" data-presenter="TV1 (Võ Quang Tâm)" data-role="tv1">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 02 / 12</div>
+          <h1 class="slide-title">Problem Statement & Persona Chuẩn 12 Trường</h1>
+          <div class="slide-subtitle">Bằng chứng nghiên cứu E01–E04 và Chân dung người dùng trọng tâm (Primary Persona P01)</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV1: Võ Quang Tâm (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block">
+            <div class="card-title">🔍 4 Nguồn Bằng chứng Nghiên cứu (E01–E04)</div>
+            <ul class="bullet-list">
+              <li><strong>E01 (Khảo sát):</strong> 120 sinh viên K18–K19 FPTU TP.HCM & Hà Nội (84.2% cần xem lịch rảnh trước khi nhắn tin).</li>
+              <li><strong>E02 (Phỏng vấn sâu):</strong> 8 cựu sinh viên K12–K15 (100% yêu cầu giấu số điện thoại và email cá nhân).</li>
+              <li><strong>E03 (Quan sát):</strong> 15 sinh viên dùng máy 1 tay ở sảnh trường nắng gắt → <em>Bắt buộc vùng chạm 48dp & tương phản 7.0:1</em>.</li>
+              <li><strong>E04 (Tân sinh viên):</strong> 45 sinh viên K20 cần phân loại chính xác Campus và ngành học.</li>
+            </ul>
+          </div>
+
+          <div class="card-block highlight">
+            <div class="card-title">👤 Primary Persona: Trương Chí Trung (P01 — K19 SE, 20 tuổi)</div>
+            <ul class="bullet-list">
+              <li><strong>Bối cảnh & Hạn chế:</strong> Cận thị 3 độ, dùng máy bằng 1 tay ngoài trời nắng gắt (Android 360×800dp).</li>
+              <li><strong>Jobs To Be Done (JTBD):</strong> <em>"Khi chuẩn bị nộp hồ sơ OJT, tôi muốn xem được hồ sơ chi tiết và đường dẫn Google Calendar của cựu sinh viên cùng ngành để chủ động trao đổi đúng lúc mà không làm phiền."</em></li>
+              <li><strong>Chỉ số thành công (Success Metric):</strong> Tìm thấy Mentor và mở xem lịch rảnh tham khảo trong <strong>&lt; 2 phút</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>ux/persona.md</code> (Bộ 3 Persona P01, P02, P03 chuẩn 12 trường)
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <img src="assets/figma/s04.png" alt="S04 Directory" style="max-height: 85%;">
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Màn hình S04 Directory phục vụ tìm kiếm Mentor &lt; 2 phút</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 03 ==================== -->
+    <div class="slide" data-slide="3" data-presenter="TV1 (Võ Quang Tâm)" data-role="tv1">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 03 / 12</div>
+          <h1 class="slide-title">Information Architecture (Kiến trúc Thông tin)</h1>
+          <div class="slide-subtitle">Cấu trúc 8 Màn hình Độc lập, Cụm Xác thực Auth Shell và 4 Tab Điều hướng Chính</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV1: Võ Quang Tâm (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block accent">
+            <div class="card-title">📱 4 Tab Điều hướng Cấp cao (CMP-04 BottomNavigationBar)</div>
+            <ul class="bullet-list">
+              <li><strong>Tab 1: Home (<code>S03</code>):</strong> Bảng tin trao đổi kinh nghiệm OJT, bộ lọc nhóm ngành và hỏi đáp.</li>
+              <li><strong>Tab 2: Directory (<code>S04</code>):</strong> Danh bạ cựu SV, lọc theo Campus (Hola, HCMC...) và Ngành (SE, AI, IA...) → Mở màn hình con <strong><code>S05 Member Public Profile</code></strong>.</li>
+              <li><strong>Tab 3: Chat (<code>S06</code>):</strong> Phòng chat 1-1 gửi CV, nhận xét hồ sơ và Icebreaker Chips.</li>
+              <li><strong>Tab 4: Profile (<code>S07</code>):</strong> Hồ sơ cá nhân, nhập link Google Calendar → Mở màn hình con <strong><code>S08 Privacy & Blocked List</code></strong>.</li>
+            </ul>
+          </div>
+
+          <div class="card-block">
+            <div class="card-title">🔐 Cụm Xác thực (Auth Shell)</div>
+            <ul class="bullet-list">
+              <li><strong><code>S01 Login & Google SSO</code>:</strong> Đăng nhập Email / Google SSO FPT, nhánh khóa tạm 60s khi nhập sai mật khẩu 5 lần.</li>
+              <li><strong><code>S02 Student Verification</code>:</strong> Xác thực Campus, Ngành, MSSV và mã OTP 6 số.</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>ux/user-flow.md</code> · Figma <strong>Page 01 (01 User Flow)</strong>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+            <div style="background: #1B365D; color: #fff; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 13px;">
+              [S01] Login & Google Auth ⇄ [S02] Student Verify & Reset Password
+            </div>
+            <div style="text-align: center; color: var(--secondary); font-weight: bold;">↓ Đăng nhập thành công</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 10px; border-radius: 6px; font-size: 12px; text-align: center;">
+                <strong>Tab 1: Home</strong><br>[S03] Feed & Q&A
+              </div>
+              <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 10px; border-radius: 6px; font-size: 12px; text-align: center;">
+                <strong>Tab 2: Directory</strong><br>[S04] Search → [S05] Detail
+              </div>
+              <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 10px; border-radius: 6px; font-size: 12px; text-align: center;">
+                <strong>Tab 3: Chat</strong><br>[S06] Direct Chat Room
+              </div>
+              <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 10px; border-radius: 6px; font-size: 12px; text-align: center;">
+                <strong>Tab 4: Profile</strong><br>[S07] Info → [S08] Privacy
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 04 ==================== -->
+    <div class="slide" data-slide="4" data-presenter="TV1 (Võ Quang Tâm)" data-role="tv1">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 04 / 12</div>
+          <h1 class="slide-title">Three User Flows (3 Luồng Thao tác Trọng tâm)</h1>
+          <div class="slide-subtitle">Flow 1 Auth, Flow 2 Discovery & Chat, Flow 3 Safety & Network Error Recovery</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV1: Võ Quang Tâm (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block">
+            <div class="card-title">🟢 Flow 1: Onboarding, Authentication & Học vụ (`F01`)</div>
+            <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">
+              <code>S01 Login</code> → Bấm "Chưa xác thực? Xác thực ngay" → <code>S02 Student Verify</code> (Chọn Campus, Ngành, MSSV, nhập OTP) → Nhập thành công chuyển sang <code>S03 Home</code>. <em>Có nhánh khóa 60s khi nhập sai 5 lần</em>.
+            </p>
+          </div>
+
+          <div class="card-block highlight">
+            <div class="card-title">🔵 Flow 2: Discovery, Mentorship Connect & Calendar (`F02`)</div>
+            <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">
+              Từ <code>S03</code> bấm Tab <code>Directory S04</code> → Chọn Filter Chip <code>✓ Hola</code> + <code>✓ SE</code> → Bấm chọn thẻ Mentor Đặng Minh Tuấn → Màn hình <code>S05 Profile</code> → Bấm nút phụ <code>📅 Xem Lịch rảnh tham khảo</code> (mở Google Calendar `US-11`) hoặc bấm nút chính <strong><code>💬 Nhắn tin trao đổi</code></strong> mở <code>S06 Chat Room</code>.
+            </p>
+          </div>
+
+          <div class="card-block warning">
+            <div class="card-title">🔴 Flow 3: Profile Update, Privacy & Phục hồi Lỗi Mạng (`F03`)</div>
+            <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">
+              Vào <code>S07 My Profile</code> cập nhật Link lịch → <strong>Nếu mất mạng: Hiện Network Error Banner + nút <code>↻ Retry Save</code> giữ nguyên form</strong> → Vào <code>S08 Privacy</code> bật/tắt 5 công tắc có nhãn <code>[ON]/[OFF]</code> và quản lý <strong>Chặn quấy rối (`US-10`)</strong> có Overlay Dialog.
+            </p>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>ux/user-flow.md</code> (Sơ đồ Mermaid 3 Flows) · Figma <strong>Page 01</strong>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <img src="assets/figma/s08_overlay_dialog.png" alt="Block Confirmation Dialog" style="max-height: 85%;">
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Nhánh xác nhận Chặn người dùng (Overlay Dialog trên S08)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 05 ==================== -->
+    <div class="slide" data-slide="5" data-presenter="TV2 (Trương Chí Trung)" data-role="tv2">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 05 / 12</div>
+          <h1 class="slide-title">AI UI Generation (Google Stitch Initial Prompt & v0)</h1>
+          <div class="slide-subtitle">Kỹ thuật Prompting đầy đủ 5 thành tố chuẩn và 4 màn hình v0 ban đầu do AI tạo ra</div>
+        </div>
+        <div class="slide-speaker-tag tv2">🎤 TV2: Trương Chí Trung (Leader)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block accent">
+            <div class="card-title">🤖 Cấu trúc Prompt Nguyên văn (Đủ 5 Thành tố Bắt buộc)</div>
+            <ul class="bullet-list">
+              <li><strong>1. Persona:</strong> <em>"Design for Trương Chí Trung (P01, 20yo, Software Engineering student, 3-diopter myopia, one-handed mobile outdoor use in bright sunlight)..."</em></li>
+              <li><strong>2. Task Scope:</strong> Mạng xã hội kết nối cựu SV & sinh viên FPT (US-04 Feed, US-06 Search Directory, US-08 Mentor Detail, US-09 Privacy, US-11 Calendar).</li>
+              <li><strong>3. Mobile Standard:</strong> Android phone standard <strong><code>360×800dp</code></strong> (8dp grid layout).</li>
+              <li><strong>4. Accessibility (A11y):</strong> WCAG 2.2 AA compliant, contrast ratio ≥ 4.5:1, touch target ≥ 48×48dp, body text ≥ 14sp.</li>
+              <li><strong>5. Brand Tokens:</strong> FPT Navy (<code>#1B365D</code>), CTA Orange (<code>#F27024</code>), Surface (<code>#FFFFFF</code>).</li>
+            </ul>
+          </div>
+
+          <div class="card-block">
+            <div class="card-title">📦 Kết quả Đầu ra Google Stitch (Phiên bản v0)</div>
+            <ul class="bullet-list">
+              <li>Sinh ra 4 màn hình cơ sở: <code>Home Feed</code>, <code>Directory Search</code>, <code>Alumni Detail</code>, và <code>Profile Settings</code>.</li>
+              <li><strong>Đánh giá sơ bộ:</strong> Giao diện sạch sẽ, bố cục hiện đại nhưng còn mắc nhiều lỗi Heuristics, vùng chạm quá nhỏ và xuất hiện tính năng sai lệch (Booking 1-1).</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>ai/ai-design-log.md</code> · <code>assets/stitch/v0_*.png</code>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <img src="assets/stitch/v0_overview_all_4_screens.png" alt="Google Stitch v0 Screens" style="max-height: 90%;">
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Ảnh tổng quan 4 màn hình Stitch v0 ban đầu</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 06 ==================== -->
+    <div class="slide" data-slide="6" data-presenter="TV2 (Trương Chí Trung)" data-role="tv2">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 06 / 12</div>
+          <h1 class="slide-title">AI Iterations & UX Critique (3 Vòng lặp & 7 Lỗi C01–C07)</h1>
+          <div class="slide-subtitle">Phản biện AI theo 10 Nielsen Heuristics & WCAG 2.2 AA với minh chứng Before / After</div>
+        </div>
+        <div class="slide-speaker-tag tv2">🎤 TV2: Trương Chí Trung (Leader)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block warning">
+            <div class="card-title">⚠️ 7 Vấn đề UX/A11y Được Phát hiện (C01–C07)</div>
+            <ul class="bullet-list" style="font-size:12px;">
+              <li><strong>C01 (Heuristic #4):</strong> Nút <code>&lt; Directory</code> trên AppBar bị lặp với TabBar dưới.</li>
+              <li><strong>C02 (Heuristic #8):</strong> Nút nổi FAB che khuất bài viết dưới cùng trên Home Feed.</li>
+              <li><strong>C03 (SC 2.5.5 / 1.4.3):</strong> Filter Chips chỉ cao <code>28dp</code> (chuẩn 48dp), chữ mờ <code>#9CA3AF</code> (2.6:1).</li>
+              <li><strong>C04 (SC 1.4.1):</strong> Switch và Chip chỉ dùng màu xanh/xám, người khiếm thị màu không rõ trạng thái.</li>
+              <li><strong>C05 (Heuristic #2):</strong> Lộ mã nghiệp vụ kỹ thuật <code>US-08</code>, <code>US-11</code> lên nhãn nút bấm của người dùng.</li>
+              <li><strong>C06 (Heuristic #9):</strong> Thiếu thông báo lỗi và nhánh phục hồi khi mất kết nối mạng trên Profile.</li>
+              <li><strong>C07 (Feature Misalignment):</strong> AI tự ý sinh luồng "Book Paid Session 1-1" và chấm sao 5⭐.</li>
+            </ul>
+          </div>
+
+          <div class="card-block highlight">
+            <div class="card-title">🔄 3 Vòng lặp Tinh chỉnh (Before / After)</div>
+            <ul class="bullet-list" style="font-size:12px;">
+              <li><strong>Vòng 1 (I01 — S05 & S03):</strong> Xóa thanh Header thừa, bỏ FAB che bài, thêm nút Chặn <code>🚫 Block This User</code> (48dp).</li>
+              <li><strong>Vòng 2 (I02 — S04):</strong> Nâng Chip lên <code>48dp</code>, thêm dấu <strong><code>✓</code></strong>, đổi màu chữ phụ lên <code>#595959</code> (đạt <strong>7.0:1</strong>).</li>
+              <li><strong>Vòng 3 (I03 — S07 & S08):</strong> Xóa mã US-xx, thêm <code>Network Error Banner</code> + <code>Retry Save</code>, thêm nhãn <strong><code>[ON]/[OFF]</code></strong> cho toàn bộ Switch.</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>ai/ai-design-log.md</code> · Bảng ảnh Before/After trong <code>assets/stitch/</code>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <div class="img-grid-2">
+            <div class="img-col">
+              <span class="img-label before">Before (Stitch v0)</span>
+              <img src="assets/stitch/iter2_before.png" alt="Before Iteration 2">
+            </div>
+            <div class="img-col">
+              <span class="img-label after">After (Iteration 2)</span>
+              <img src="assets/stitch/iter2_after.png" alt="After Iteration 2">
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Minh chứng Vòng lặp 2: Sửa vùng chạm 48dp & tương phản 7.0:1</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 07 ==================== -->
+    <div class="slide" data-slide="7" data-presenter="TV2 (Trương Chí Trung)" data-role="tv2">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 07 / 12</div>
+          <h1 class="slide-title">Design Decisions (Quyết định Thiết kế Accept / Modify / Reject)</h1>
+          <div class="slide-subtitle">Trọng tâm phản biện: Từ chối Booking 1-1 (D07) và Sửa đổi nút FAB che nội dung (D02)</div>
+        </div>
+        <div class="slide-speaker-tag tv2">🎤 TV2: Trương Chí Trung (Leader)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <table class="mini-table">
+            <tr>
+              <th style="width: 15%;">Mã</th>
+              <th style="width: 20%;">Loại Quyết định</th>
+              <th>Nội dung Phản biện & Cơ sở Quyết định của Nhóm 4</th>
+            </tr>
+            <tr>
+              <td><strong>D01, D04</strong></td>
+              <td><span class="badge-pill accept">ACCEPT</span></td>
+              <td><strong>Chấp nhận đề xuất A11y:</strong> Đổi màu chữ phụ sang <code>#595959</code> (đạt 7.0:1) và chuẩn hóa toàn bộ touch target lên <code>48×48dp</code> (WCAG SC 2.5.5).</td>
+            </tr>
+            <tr>
+              <td><strong>D05, D06</strong></td>
+              <td><span class="badge-pill accept">ACCEPT</span></td>
+              <td><strong>Chấp nhận khắc phục lỗi Heuristics:</strong> Thêm chữ <code>[ON]</code>/<code>[OFF]</code> trên Switch (không dựa vào màu), thêm <code>Network Error Banner</code> + <code>Retry Save</code> trên S07.</td>
+            </tr>
+            <tr>
+              <td><strong>D02</strong></td>
+              <td><span class="badge-pill modify">MODIFY</span></td>
+              <td><strong>Sửa đổi đề xuất FAB:</strong> AI đề xuất dời vị trí nút nổi FAB. Nhóm quyết định <strong>xóa hẳn FAB</strong> và đưa thanh câu hỏi lên đầu Home Feed để không bao giờ che bài viết.</td>
+            </tr>
+            <tr style="background:#FEF2F2;">
+              <td><strong>D07</strong> ⭐</td>
+              <td><span class="badge-pill reject">REJECT</span></td>
+              <td><strong>TỪ CHỐI HOÀN TOÀN ĐỀ XUẤT BOOKING 1-1 & CHẤM SAO CỦA AI:</strong><br>
+                - Trái với tinh thần hỗ trợ tự nguyện của Cựu SV FPT.<br>
+                - Trái với yêu cầu của giảng viên (chỉ chia sẻ link lịch cá nhân Google Calendar <code>US-11</code>).<br>
+                - Đổi thành CTA chính: <strong><code>💬 Nhắn tin trao đổi (Direct Message)</code></strong> và nút phụ: <strong><code>📅 Xem Lịch rảnh tham khảo</code></strong>.</td>
+            </tr>
+          </table>
+
+          <div class="evidence-bar" style="margin-top: 14px;">
+            <span>Minh chứng:</span>
+            <code>design/design-decisions.md</code> (Bảng quyết định D01–D07)
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <img src="assets/figma/s05.png" alt="S05 Member Public Profile" style="max-height: 85%;">
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">S05 sau khi bác bỏ Booking: Nút chính "Nhắn tin trao đổi" + Nút phụ "Xem Lịch rảnh"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 08 ==================== -->
+    <div class="slide" data-slide="8" data-presenter="TV3 (Nguyễn Phương Khải)" data-role="tv3">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 08 / 12</div>
+          <h1 class="slide-title">Wireframe → Final UI (8 Màn hình Chuẩn 360×800dp)</h1>
+          <div class="slide-subtitle">Đối chiếu Low-Fi (Page 02) sang Hi-Fi Hoàn chỉnh (Page 03: S01 → S08)</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV3: Nguyễn Phương Khải (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block accent">
+            <div class="card-title">📐 Danh sách 8 Màn hình Độc lập (Không tính trùng lặp)</div>
+            <ul class="bullet-list" style="font-size:12.5px;">
+              <li><strong><code>S01 Login & Google SSO</code>:</strong> Xác thực tài khoản FPT, đăng nhập 1 chạm Google SSO.</li>
+              <li><strong><code>S02 Student Verification</code>:</strong> Khai báo thông tin học vụ (Campus, Ngành, MSSV) + OTP.</li>
+              <li><strong><code>S03 Home Feed & Q&A</code>:</strong> Bảng tin chia sẻ kinh nghiệm, phân loại chuyên ngành.</li>
+              <li><strong><code>S04 Directory Search</code>:</strong> Danh bạ cựu SV, bộ lọc Campus/Ngành vùng chạm 48dp.</li>
+              <li><strong><code>S05 Alumni Public Profile</code>:</strong> Hồ sơ chi tiết, nút Nhắn tin & Link Google Calendar.</li>
+              <li><strong><code>S06 Direct Chat Room</code>:</strong> Khung chat đính kèm CV thực tập và Icebreaker Chips.</li>
+              <li><strong><code>S07 My Profile & Link Sharing</code>:</strong> Quản lý hồ sơ cá nhân và dán link lịch làm việc.</li>
+              <li><strong><code>S08 Privacy & Blocked List</code>:</strong> Thiết lập bảo mật 5 công tắc [ON]/[OFF] & Chặn quấy rối.</li>
+            </ul>
+          </div>
+
+          <div class="card-block">
+            <div class="card-title">🧩 Biến thể Trạng thái (Đặt cạnh màn hình chính)</div>
+            <p style="font-size:12px; color:var(--text-secondary);">
+              Các trạng thái <code>S04 Skeleton Loading</code>, <code>Empty State</code>, <code>S07 Network Error</code>, và <code>S08 Block Dialog</code> được đặt riêng làm Frame biến thể, không tính gian lận vào 8 màn hình chính theo quy chuẩn.
+            </p>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>design/screen-spec.md</code> · Figma <strong>Page 02 (Wireframe)</strong> & <strong>Page 03 (Final UI)</strong>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; height: 95%;">
+            <img src="assets/figma/s01.png" alt="S01" style="height: 100%; width: 100%; object-fit: contain;">
+            <img src="assets/figma/s02.png" alt="S02" style="height: 100%; width: 100%; object-fit: contain;">
+            <img src="assets/figma/s03.png" alt="S03" style="height: 100%; width: 100%; object-fit: contain;">
+            <img src="assets/figma/s04.png" alt="S04" style="height: 100%; width: 100%; object-fit: contain;">
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">4 màn hình đầu tiên trong bộ 8 màn hình Hi-Fi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 09 ==================== -->
+    <div class="slide" data-slide="9" data-presenter="TV3 (Nguyễn Phương Khải)" data-role="tv3">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 09 / 12</div>
+          <h1 class="slide-title">Design System & 9 Nhóm Component (Auto Layout + Variants)</h1>
+          <div class="slide-subtitle">Figma Page 04 (Design System Tokens) và Page 05 (9 Component CMP-01 → CMP-09)</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV3: Nguyễn Phương Khải (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block">
+            <div class="card-title">🎨 Hệ thống Design Tokens (Figma Page 04)</div>
+            <ul class="bullet-list" style="font-size:12.5px;">
+              <li><strong>Màu sắc 2 tầng:</strong> Primitive (<code>blue-900</code>, <code>orange-500</code>) → Semantic (<code>color/brand/primary = #1B365D</code>, <code>color/brand/cta-orange = #F27024</code>, <code>color/text/secondary = #595959</code>).</li>
+              <li><strong>Typography:</strong> Tiêu đề <code>Hanken Grotesk</code> (Bold), Thân bài <code>Inter</code> (14sp / 16sp, line-height 1.5). Không có chữ nào nhỏ hơn 14sp trong toàn bộ ứng dụng.</li>
+              <li><strong>Spacing & Grid:</strong> Lưới chuẩn <strong><code>8dp</code></strong> (8, 16, 24, 32dp), bo góc <code>8dp</code> / <code>12dp</code>, Elevation mềm mại.</li>
+            </ul>
+          </div>
+
+          <div class="card-block highlight">
+            <div class="card-title">📦 Đủ 9 Nhóm Component Bắt buộc (CMP-01 → CMP-09)</div>
+            <ul class="bullet-list" style="font-size:12px;">
+              <li><code>CMP-01 Button</code> (Primary, Secondary, Danger, Ghost, Outlined) — 100% cao 48dp–56dp.</li>
+              <li><code>CMP-02 Input & Controls</code> (TextField, Filter Chip có dấu ✓, Switch có nhãn [ON]/[OFF]).</li>
+              <li><code>CMP-03 Cards</code> (Alumni Card, Feed Post Card) — Padding 16dp Auto Layout.</li>
+              <li><code>CMP-04 Navigation</code> (BottomNavigationBar 4 tabs, TabIndicator).</li>
+              <li><code>CMP-05 AppBar</code> (Default Back AppBar, Search Header).</li>
+              <li><code>CMP-06 Dialog</code> (Confirmation Overlay Dialog, Block Alert).</li>
+              <li><code>CMP-07 Loading</code> (Skeleton Card Shimmer, Circular Progress).</li>
+              <li><code>CMP-08 Empty State</code> (Zero search result minh họa trực quan).</li>
+              <li><code>CMP-09 Error State</code> (Network Error Banner kèm nút Retry Save).</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>design/DESIGN.md</code> · Figma <strong>Page 04 (Design System)</strong> & <strong>Page 05 (Components)</strong>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; height: 95%;">
+            <img src="assets/figma/s05.png" alt="S05" style="height: 100%; width: 100%; object-fit: contain;">
+            <img src="assets/figma/s06.png" alt="S06" style="height: 100%; width: 100%; object-fit: contain;">
+            <img src="assets/figma/s07.png" alt="S07" style="height: 100%; width: 100%; object-fit: contain;">
+            <img src="assets/figma/s08.png" alt="S08" style="height: 100%; width: 100%; object-fit: contain;">
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">4 màn hình tiếp theo xây dựng 100% từ 9 nhóm Component</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 10 ==================== -->
+    <div class="slide" data-slide="10" data-presenter="TV4 (Đỗ Trọng Tín)" data-role="tv4">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 10 / 12</div>
+          <h1 class="slide-title">Accessibility & Responsive QA (WCAG 2.2 AA & Multi-screen)</h1>
+          <div class="slide-subtitle">3 Tiêu chí CRITICAL đạt 100% và Kiểm thử co giãn giao diện trên thiết bị di động</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV4: Đỗ Trọng Tín (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block highlight">
+            <div class="card-title">✅ 3 Tiêu chí A11y CRITICAL Đạt Tuyệt đối (100%)</div>
+            <ul class="bullet-list" style="font-size:12.5px;">
+              <li><strong>1. Tương phản màu sắc (Contrast Ratio):</strong><br>
+                - Chữ chính <code>#0F172A</code> trên nền trắng đạt <strong>17.74:1</strong>.<br>
+                - Chữ phụ <code>#595959</code> đạt <strong>7.00:1</strong> (vượt xa chuẩn tối thiểu 4.5:1 của WCAG).<br>
+                - Nút CTA cam <code>#F27024</code> với chữ trắng đạt <strong>3.2:1</strong> cho UI Control.</li>
+              <li><strong>2. Vùng cảm ứng & Kích thước chữ (Touch Target & Font Size):</strong><br>
+                - 100% nút bấm, filter chip, icon, switch đều đạt kích thước tối thiểu <strong><code>48×48dp</code></strong>.<br>
+                - Không có bất kỳ dòng chữ nội dung nào nhỏ hơn <strong><code>14sp</code></strong>.</li>
+              <li><strong>3. Không chỉ dựa vào màu sắc (Not Color Alone):</strong><br>
+                - Chip đang chọn có icon tích <strong><code>✓</code></strong>.<br>
+                - Công tắc Switch có huy hiệu văn bản <strong><code>[ON]</code></strong> hoặc <strong><code>[OFF]</code></strong>.</li>
+            </ul>
+          </div>
+
+          <div class="card-block accent">
+            <div class="card-title">📱 Responsive QA (Co giãn Đa màn hình)</div>
+            <ul class="bullet-list" style="font-size:12px;">
+              <li>Kiểm thử chuẩn trên <strong><code>360×800dp</code></strong> (chuẩn cơ sở) và <strong><code>412×915dp</code></strong> (máy màn hình lớn).</li>
+              <li>Quy tắc co giãn: Thẻ Card và Input dùng <code>Fill Container</code> (chiều ngang), khoảng cách mép cố định <code>16dp</code>. Khi xoay ngang hoặc trên Tablet (≥600dp), BottomBar tự chuyển sang NavigationRail.</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>design/design-decisions.md</code> (Bảng QA Checklist 20 tiêu chí Simplicity 100/100)
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <div style="background: #FFFFFF; border: 2px solid #10B981; border-radius: 12px; padding: 20px; width: 100%; text-align: center;">
+            <div style="font-size: 40px; margin-bottom: 8px;">🛡️</div>
+            <div style="font-weight: 800; font-size: 18px; color: #065F46; margin-bottom: 6px;">WCAG 2.2 AA VERIFIED</div>
+            <div style="font-size: 13px; color: #047857; margin-bottom: 14px;">100% Passed all Critical Accessibility Criteria</div>
+            <div style="display: flex; justify-content: center; gap: 8px;">
+              <span class="badge-pill accept">Contrast 7.0:1</span>
+              <span class="badge-pill accept">Touch 48dp</span>
+              <span class="badge-pill accept">Font ≥14sp</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 11 ==================== -->
+    <div class="slide" data-slide="11" data-presenter="TV4 (Đỗ Trọng Tín)" data-role="tv4">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 11 / 12</div>
+          <h1 class="slide-title">Interactive Prototype (Trình diễn Tương tác 3 Flows trên Figma)</h1>
+          <div class="slide-subtitle">Figma Page 06 (06 Prototype): Starting Points, Skeleton Shimmer, Overlay Dialog, Zero Dead-Ends</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV4: Đỗ Trọng Tín (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block accent">
+            <div class="card-title">🎯 3 Starting Points Độc lập trên Figma Page 06</div>
+            <ul class="bullet-list" style="font-size:12.5px;">
+              <li><strong>Starting Point 1 (Flow 1 Auth):</strong> Từ <code>S01 Login</code> chuyển sang <code>S02 Student Verification</code> và vào <code>S03 Home Feed</code>.</li>
+              <li><strong>Starting Point 2 (Flow 2 Directory):</strong> Từ <code>S04 Directory</code> click thẻ cựu SV Đặng Minh Tuấn → Chuyển cảnh qua <strong><code>S04 Skeleton Loading</code></strong> → Hiện <code>S05 Detail</code> → Bấm <code>💬 Nhắn tin trao đổi</code> mở <code>S06 Chat Room</code>.</li>
+              <li><strong>Starting Point 3 (Flow 3 Safety):</strong> Từ <code>S05</code> cuộn xuống bấm <code>🚫 Chặn người dùng</code> → Mở <strong><code>Block Confirmation Dialog</code> dạng Overlay</strong> → Sang <code>S07 My Profile</code> thử lỗi mạng và nút <code>↻ Retry Save</code> → Sang <code>S08 Privacy</code>.</li>
+            </ul>
+          </div>
+
+          <div class="card-block highlight">
+            <div class="card-title">🔄 Kỹ thuật Prototype Chuyên sâu (Zero Dead-Ends)</div>
+            <ul class="bullet-list" style="font-size:12px;">
+              <li><strong>Overlay Dialog:</strong> Hộp thoại xác nhận chặn người dùng mở đè lên màn hình với lớp phủ làm mờ <code>rgba(0,0,0,0.5)</code>.</li>
+              <li><strong>Animated Transition:</strong> Chuyển trang mượt mà <code>Smart Animate / Instant</code> chuẩn 200–300ms.</li>
+              <li><strong>Điều hướng 2 chiều:</strong> Mọi màn hình con đều có nút <code>← Back</code> quay về đúng màn hình trước đó, không bao giờ rơi vào ngõ cụt.</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            Figma <strong>Page 06 (06 Prototype)</strong> · <code>docs/interactive-prototype-guide.md</code>
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <img src="assets/figma/s04_loading_skeleton.png" alt="S04 Loading Skeleton Shimmer" style="max-height: 85%;">
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Hiệu ứng chuyển cảnh Skeleton Shimmer trước khi load trang S05</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 12 ==================== -->
+    <div class="slide" data-slide="12" data-presenter="TV4 (Đỗ Trọng Tín)" data-role="tv4">
+      <div class="slide-header">
+        <div class="slide-title-wrap">
+          <div class="slide-number">Slide 12 / 12</div>
+          <h1 class="slide-title">Flutter Handoff & Architecture Summary (Sẵn sàng Lập trình)</h1>
+          <div class="slide-subtitle">Bàn giao Lập trình viên: 6 Mục Đặc tả Kỹ thuật, 2 Bảng Mapping & Mã nguồn Dart Sẵn sàng Chạy</div>
+        </div>
+        <div class="slide-speaker-tag">🎤 TV4: Đỗ Trọng Tín (Lead)</div>
+      </div>
+      <div class="slide-body">
+        <div class="slide-left">
+          <div class="card-block">
+            <div class="card-title">📋 6 Mục Đặc tả Chuẩn cho Cả 8 Màn hình (S01 → S08)</div>
+            <ul class="bullet-list" style="font-size:12px;">
+              <li><code>1. Layout Structure</code> (SingleChildScrollView, ListView, Column, Padding 16dp).</li>
+              <li><code>2. Components Used</code> (Ánh xạ chính xác tới CMP-01 → CMP-09).</li>
+              <li><code>3. States & Triggers</code> (Default, Focused, Error, Loading Skeleton, Empty).</li>
+              <li><code>4. Interactions</code> (onTap, onSubmitted, onDismissed kèm rung phản hồi Haptic).</li>
+              <li><code>5. Navigation Contract</code> (Route path, arguments truyền vào như <code>alumniId</code>, <code>chatId</code>).</li>
+              <li><code>6. UI Constraints & A11y</code> (Semantics label, touch target ≥48dp, Regex validation).</li>
+            </ul>
+          </div>
+
+          <div class="card-block accent">
+            <div class="card-title">🗺️ 2 Bảng Mapping Toàn cục & Mã Dart Mẫu</div>
+            <ul class="bullet-list" style="font-size:12px;">
+              <li><strong>Bảng 1 (Tokens → Flutter):</strong> <code>color/brand/primary → AppColors.navyPrimary</code>, <code>font/heading → HankenGroteskStyle</code>.</li>
+              <li><strong>Bảng 2 (Components → Widgets):</strong> <code>CMP-01 → ElevatedButton</code>, <code>CMP-02 → FilterChip / SwitchListTile</code>, <code>CMP-04 → NavigationBar</code>.</li>
+              <li><strong>Mã nguồn Dart đầy đủ:</strong> Kèm file <code>app_theme.dart</code> và code hoàn chỉnh cho màn <code>S01</code>, <code>S02</code>, <code>S05</code>, <code>S06</code> sẵn sàng cho giai đoạn code Lab 3.</li>
+            </ul>
+          </div>
+
+          <div class="evidence-bar">
+            <span>Minh chứng:</span>
+            <code>handoff/flutter-handoff.md</code> (Tệp đặc tả kỹ thuật 109KB hoàn chỉnh)
+          </div>
+        </div>
+
+        <div class="slide-right">
+          <div style="background: #0F172A; color: #38BDF8; font-family: var(--font-mono); font-size: 11px; padding: 14px; border-radius: 8px; width: 100%; height: 95%; overflow: hidden; line-height: 1.6;">
+            <div style="color: #94A3B8;">// app_theme.dart sample</div>
+            <span style="color: #F43F5E;">class</span> <span style="color: #FBBF24;">AppColors</span> {<br>
+            &nbsp;&nbsp;<span style="color: #F43F5E;">static const</span> navyPrimary = <span style="color: #A855F7;">Color</span>(0xFF1B365D);<br>
+            &nbsp;&nbsp;<span style="color: #F43F5E;">static const</span> ctaOrange = <span style="color: #A855F7;">Color</span>(0xFFF27024);<br>
+            &nbsp;&nbsp;<span style="color: #F43F5E;">static const</span> textSecondary = <span style="color: #A855F7;">Color</span>(0xFF595959);<br>
+            }<br><br>
+            <span style="color: #94A3B8;">// Touch Target 48dp Rule</span><br>
+            elevatedButtonTheme: ElevatedButtonThemeData(<br>
+            &nbsp;&nbsp;style: ElevatedButton.styleFrom(<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;minimumSize: <span style="color: #F43F5E;">const</span> <span style="color: #A855F7;">Size</span>(double.infinity, 48),<br>
+            &nbsp;&nbsp;),<br>
+            ),
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Navigation Bar & Presentation Progress -->
+  <footer class="bottom-nav">
+    <div class="kb-hint">
+      Dùng phím <kbd>←</kbd> <kbd>→</kbd> hoặc <kbd>Space</kbd> để chuyển slide · Phím <kbd>F</kbd> toàn màn hình
+    </div>
+
+    <div class="slide-dots" id="dotsContainer">
+      <!-- 12 dots generated dynamically -->
+    </div>
+
+    <div class="nav-buttons">
+      <button id="btnPrev" class="btn-icon">◀ Trước</button>
+      <button id="btnNext" class="btn-icon" style="background: var(--secondary); border-color: var(--secondary);">Sau ▶</button>
+    </div>
+  </footer>
+
+  <script>
+    // Slide Navigation Logic
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    const dotsContainer = document.getElementById('dotsContainer');
+    const presenterPill = document.getElementById('presenterPill');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnFullscreen = document.getElementById('btnFullscreen');
+
+    // Generate Dots
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (slide.dataset.role === 'tv2') {
+        dot.classList.add('tv2');
+        dot.title = `Slide ${index + 1}: ${slide.dataset.presenter} ⭐`;
+      } else {
+        dot.title = `Slide ${index + 1}: ${slide.dataset.presenter}`;
+      }
+      if (index === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(index));
+      dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateSlide() {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === currentSlide);
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+
+      const currentSlideEl = slides[currentSlide];
+      const presenter = currentSlideEl.dataset.presenter;
+      presenterPill.textContent = presenter;
+
+      if (currentSlideEl.dataset.role === 'tv2') {
+        presenterPill.style.background = 'rgba(242, 112, 36, 0.25)';
+        presenterPill.style.color = '#F97316';
+        presenterPill.style.borderColor = '#F97316';
+      } else {
+        presenterPill.style.background = 'rgba(255, 255, 255, 0.1)';
+        presenterPill.style.color = '#E2E8F0';
+        presenterPill.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+      }
+
+      btnPrev.disabled = currentSlide === 0;
+      btnNext.disabled = currentSlide === totalSlides - 1;
+    }
+
+    function goToSlide(n) {
+      if (n >= 0 && n < totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    btnNext.addEventListener('click', nextSlide);
+    btnPrev.addEventListener('click', prevSlide);
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'Home') {
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        goToSlide(totalSlides - 1);
+      }
+    });
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+
+    // 10-Minute Presentation Timer
+    let timeLeft = 600; // 10 minutes = 600s
+    let timerRunning = false;
+    let timerInterval = null;
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerBadge = document.getElementById('timerBadge');
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function toggleTimer() {
+      if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        timerBadge.style.background = 'rgba(255, 255, 255, 0.08)';
+      } else {
+        timerRunning = true;
+        timerBadge.style.background = 'rgba(16, 185, 129, 0.25)';
+        timerInterval = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft--;
+            timerDisplay.textContent = formatTime(timeLeft);
+            if (timeLeft <= 60) {
+              timerBadge.style.background = 'rgba(220, 38, 38, 0.4)';
+              timerBadge.style.color = '#FCA5A5';
+            }
+          } else {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            alert('Hết thời lượng 10 phút trình bày slide! Hãy chuyển sang phần Demo trực tiếp 5 phút.');
+          }
+        }, 1000);
+      }
+    }
+
+    timerBadge.addEventListener('click', toggleTimer);
+
+    // Initial load
+    updateSlide();
+  </script>
+</body>
+</html>

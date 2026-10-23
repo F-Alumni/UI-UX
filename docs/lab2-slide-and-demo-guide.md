@@ -3,6 +3,7 @@
 > **Dự án:** **FPT Alumni Connect** — Nền tảng kết nối Cựu sinh viên & Sinh viên Đại học FPT  
 > **Môn học:** PRM323 — Cross-Platform Application Development (Lab 2: Google Stitch → Figma)  
 > **Căn cứ Quy chuẩn:** [PRM393 UI/UX Material — Lab 2 · Slide & Demo (`/lab2-presentation.html`)](https://prm393-material.web.app/lab2-presentation.html)  
+> **Slide Trình chiếu Tương tác:** [slides.html](../slides.html) (Mở trên trình duyệt, 12 slide kèm đếm ngược 10 phút, phím mũi tên & phím F)  
 > **Cấu trúc Thời lượng Chuẩn:** **10 phút** Trình bày (12 Slides) • **5 phút** Demo Trực tiếp (Figma 6 Pages + GitHub) • **5 phút** Hỏi đáp Phản biện (Q&A)
 
 ---
