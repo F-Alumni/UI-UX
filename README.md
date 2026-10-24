@@ -1,13 +1,16 @@
 # 🎓 FPT Alumni Connect — Nền tảng Kết nối Cựu sinh viên & Sinh viên Đại học FPT
 
 [![Course: PRM323](https://img.shields.io/badge/Course-PRM323%20Lab%202-1B365D?style=for-the-badge&logo=flutter)](https://github.com/F-Alumni/UI-UX)
-[![Figma: 100% Auto Layout](https://img.shields.io/badge/Figma-100%25%20Auto%20Layout-F27024?style=for-the-badge&logo=figma)](https://www.figma.com/)
+[![Figma: 100% Auto Layout](https://img.shields.io/badge/Figma-100%25%20Auto%20Layout-F27024?style=for-the-badge&logo=figma)](https://www.figma.com/design/PPdvsVA0O63HEHTQkxBQX0/PRM323---Lab-2---F-Alumni---Nhom-4?node-id=94-805&t=sDUpjW1KFg82UUlH-0)
 [![WCAG 2.1: Level AA](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA%20(5.4:1)-10B981?style=for-the-badge)](https://www.w3.org/WAI/WCAG21/quickref/)
 [![Quality Gates: P0-P5 Passed](https://img.shields.io/badge/Quality%20Gates-P0--P5%20Passed-blue?style=for-the-badge)](https://prm393-material.web.app/)
 
 > **Dự án:** Thiết kế UI/UX ứng dụng di động có hỗ trợ AI (Google Stitch → Figma → Flutter Handoff)  
 > **Môn học:** PRM323 — Cross-Platform Application Development  
 > **Nhóm thực hiện:** **Nhóm 4** — Lớp PRM323 Đại học FPT TP. Hồ Chí Minh  
+> **Link Figma chính thức:** [PRM323 - Lab 2 - F-Alumni - Nhom 4](https://www.figma.com/design/PPdvsVA0O63HEHTQkxBQX0/PRM323---Lab-2---F-Alumni---Nhom-4?node-id=94-805&t=sDUpjW1KFg82UUlH-0)  
+> **Interactive Slide Deck (Trình bày 10 phút):** [slides.html](slides.html) (Mở trực tiếp trên Chrome/Edge, phím mũi tên & phím F để toàn màn hình)  
+> **Slide Báo cáo Định dạng PDF:** [slides.pdf](slides.pdf) (12 trang slide hoàn chỉnh để nộp hoặc xem offline)  
 > **Căn cứ Quy chuẩn:** Đề Lab 2 (12 trang), Bộ chuẩn [PRM393 UI/UX Material](https://prm393-material.web.app/), Bộ 12 trường Persona, Quality Gates P0–P5, và 20 tiêu chí UI Checklist.
 
 ---
@@ -44,6 +47,8 @@ Nhóm 4 phân chia công việc theo đúng cấu trúc: **Mỗi thành viên ph
 
 ```
 UI-UX/
+├── slides.html                    # [Interactive Slide Deck] 12 slide thuyết trình trực tiếp trên trình duyệt
+├── slides.pdf                     # [Slide PDF Export] Bản PDF 12 trang chuẩn landscape 16:9 của slide
 ├── README.md                      # Tài liệu tổng quan dự án & Bảng phân công Nhóm 4 (TV1 quản lý)
 ├── phan-cong-nhom4.md             # Bản phân công công việc chi tiết 4 thành viên (Cân bằng 25%)
 │
@@ -67,7 +72,7 @@ UI-UX/
 │   └── ai-design-log.md           # Nhật ký Stitch v0, 3 vòng lặp có ý nghĩa, 7 phát hiện Heuristics & Quyết định
 │
 └── assets/                        # [Tài nguyên Hình ảnh Bằng chứng]
-    ├── figma/                     # Trọn bộ 8 ảnh chụp màn hình Mobile chính thức (s01.png -> s08.png, không có Booking 1-1)
+    ├── figma/                     # Trọn bộ 8 ảnh chụp màn hình Mobile chính thức (s01.png -> s08.png)
     └── stitch/                    # 15 ảnh chụp màn hình v0 và Before/After từ Google Stitch
         ├── v0_overview_all_4_screens.png
         ├── iter1_before.png / iter1_after.png

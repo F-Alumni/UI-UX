@@ -31,7 +31,7 @@ Toàn bộ màu sắc được khai báo dưới dạng **Figma Color Variables*
 | :--- | :--- | :---: | :--- |
 | **Brand Primary** | `color/brand/primary-navy` | `#1B365D` | Màu chủ đạo học thuật: Tiêu đề phần, thanh điều hướng, Filter Chip đang chọn, nút phụ viền (Secondary Outlined), huy hiệu xác thực trường. |
 | **Brand Primary Tint** | `color/brand/navy-tint` | `#EEF2FF` | Nền nút Tonal (`Direct Message`, `Quick DM`), nền hộp thông tin xác thực Alumni, nền tag kỹ năng/chủ đề cố vấn. |
-| **Brand Primary CTA** | `color/brand/cta-orange` | `#F27024` | Màu hành động chính (Primary CTA): Nút `Book via Google Calendar`, `View Profile`, `Save Changes`, và biểu tượng tab đang kích hoạt. |
+| **Brand Primary CTA** | `color/brand/cta-orange` | `#F27024` | Màu hành động chính (Primary CTA): Nút `💬 Nhắn tin trao đổi`, `View Profile`, `Save Changes`, và biểu tượng tab đang kích hoạt. |
 | **Brand CTA Tint** | `color/brand/orange-tint` | `#FFF7ED` | Nền thông báo mùa OJT, nền huy hiệu `Recruiter Alumni` hoặc `Present`. |
 | **Status — Verified / Success** | `color/status/verified-emerald` | `#10B981` | Biểu tượng tích xanh `Verified Alumni`, chấm trạng thái `Open for Mentoring`, trạng thái bật (`[ON]`) của công tắc Switch. |
 | **Status — Verified Surface** | `color/status/emerald-tint` | `#D1FAE5` | Nền của pill trạng thái `OPEN FOR MENTORING` và nhãn `[ON]` cạnh Switch (chữ màu `#065F46`). |
@@ -58,7 +58,7 @@ Toàn bộ màu sắc được khai báo dưới dạng **Figma Color Variables*
 | `brand/primary-navy` trên `brand/navy-tint` | `#1B365D` trên `#EEF2FF` | **10.68 : 1** | ≥ 4.5 : 1 (Chữ thường) | ✅ **PASS (AAA)** | Nút `Direct Message`, tag kỹ năng (`Go`, `Kubernetes`, `System Architecture`). |
 | `status/error-crimson` trên `surface/card` | `#DC2626` trên `#FFFFFF` | **4.83 : 1** | ≥ 4.5 : 1 (Chữ thường) | ✅ **PASS (AA)** | Thông báo lỗi dưới ô Google Calendar URL, nút `Block This User` (`D01`, `D06`). |
 | `status/error-crimson` trên `status/error-tint` | `#991B1B` / `#DC2626` trên `#FDF3F2` | **4.52 : 1 – 7.40 : 1** | ≥ 4.5 : 1 (Chữ thường) | ✅ **PASS (AA)** | Nội dung cảnh báo trong `Network Error Banner` (`S07`). |
-| `text/on-dark` trên `brand/cta-orange` | `#FFFFFF` (Bold 15–16sp) trên `#F27024` | **3.12 : 1** *(UI Control / Bold Label)* | ≥ 3.0 : 1 (UI Component & Large/Bold Text) | ✅ **PASS (AA)** | Nút CTA chính `Book via Google Calendar` kèm icon lịch rõ nét (`S05`). |
+| `text/on-dark` trên `brand/cta-orange` | `#FFFFFF` (Bold 15–16sp) trên `#F27024` | **3.12 : 1** *(UI Control / Bold Label)* | ≥ 3.0 : 1 (UI Component & Large/Bold Text) | ✅ **PASS (AA)** | Nút `Xem Lịch Google Calendar` kèm icon lịch rõ nét (`S05`). |
 
 ---
 
@@ -132,9 +132,9 @@ Tất cả **9 nhóm Component** dưới đây được dựng bằng **100% Fig
 ### 5.1. `CMP-01`: Button (Nút hành động)
 - **Auto Layout:** Horizontal, ` Alignment: Center`, `Padding: 16dp (horizontal) × 12dp (vertical)`, `Item Spacing: 8dp`, `Min Height: 48dp` (riêng Primary CTA có phụ đề hai dòng trên `S05` cao `56dp`), `Corner Radius: 8dp`.
 - **Các Variants bắt buộc:**
-  1. `Variant=Primary-CTA`: Nền `#F27024`, chữ `#FFFFFF` (`15sp SemiBold`), icon trái/phải `20dp`. Dùng cho CTA chính duy nhất trên màn hình (`Book via Google Calendar`, `View Profile`, `Save Changes`).
+  1. `Variant=Primary-CTA`: Nền `#F27024`, chữ `#FFFFFF` (`15sp SemiBold`), icon trái/phải `20dp`. Dùng cho CTA chính duy nhất trên màn hình (`💬 Nhắn tin trao đổi`, `View Profile`, `Save Changes`).
   2. `Variant=Secondary-Navy`: Nền `#1B365D`, chữ `#FFFFFF`. Dùng cho hành động kết nối đồng cấp (`Connect as Peer`, `View Program Details`).
-  3. `Variant=Secondary-Outlined`: Nền `#FFFFFF`, viền `1.5dp #1B365D`, chữ `#1B365D`. Dùng cho nút `Book 30m Slot` bên trong thẻ bài viết trên `S03 Home` (theo quyết định `D02`).
+  3. `Variant=Secondary-Outlined`: Nền `#FFFFFF`, viền `1.5dp #1B365D`, chữ `#1B365D`. Dùng cho nút phụ viền `📅 Xem Lịch rảnh tham khảo` trên `S05` hoặc nút phụ trong thẻ bài viết trên `S03 Home` (theo quyết định `D02 & D07`).
   4. `Variant=Secondary-Tonal`: Nền `#EEF2FF`, chữ `#1B365D`, icon `20dp`. Dùng cho nút `Direct Message` (`S05`) và `Message` (`S04`).
   5. `Variant=Destructive-Outlined`: Nền `#FFFFFF`, viền `1.5dp #DC2626`, chữ `#DC2626`, icon `🚫`. Dùng cho nút `Block This User` (`US-10` trên `S05`).
   6. `Variant=Destructive-Solid`: Nền `#DC2626`, chữ `#FFFFFF`. Dùng cho nút `Confirm Block` trong Dialog và nút `Retry Save` trong Error Banner (`S07`).
@@ -158,8 +158,8 @@ Tất cả **9 nhóm Component** dưới đây được dựng bằng **100% Fig
 ### 5.3. `CMP-03`: Card (Thẻ nội dung đa năng)
 - **Auto Layout:** Vertical, `Width: Fill Container (328dp ở màn 360dp)`, `Padding: 16dp`, `Gap: 12dp`, `Radius: 12dp`, `Background: #FFFFFF`, `Border: 1dp #E5E7EB`.
 - **Các Variants:**
-  1. `Type=Alumni-Directory-Card` (`S04`): Header (Avatar `56dp` + chấm online + Tên `16sp SemiBold` + Badge `✓ Verified` + Khóa/Chức danh + Trường/Ngành) → Dải Skill Tags (`Wrap`, chữ `14sp`) → Hộp lịch trống (`Calendar Booking Available`) → Hàng 2 nút (`View Profile` cam + `Message` tonal).
-  2. `Type=Feed-Post-Card` (`S03`): Status pill trên cùng → Thông tin tác giả → Nội dung bài chia sẻ (`14sp`) → Hộp tóm tắt buổi tư vấn → Hàng nút hành động (`Book 30m Slot` kiểu Outlined `#1B365D` + `Quick DM`) → Footer tương tác (`Like`, `Comment`, thời gian).
+  1. `Type=Alumni-Directory-Card` (`S04`): Header (Avatar `56dp` + chấm online + Tên `16sp SemiBold` + Badge `✓ Verified` + Khóa/Chức danh + Trường/Ngành) → Dải Skill Tags (`Wrap`, chữ `14sp`) → Hộp thông tin lịch (`Google Calendar Link Available`) → Hàng 2 nút (`View Profile` cam + `Message` tonal).
+  2. `Type=Feed-Post-Card` (`S03`): Status pill trên cùng → Thông tin tác giả → Nội dung bài chia sẻ (`14sp`) → Hộp tóm tắt buổi tư vấn → Hàng nút hành động (`Xem chi tiết` kiểu Outlined `#1B365D` + `💬 Nhắn tin trao đổi`) → Footer tương tác (`Like`, `Comment`, thời gian).
   3. `Type=Profile-Section-Card` (`S05`, `S07`): Tiêu đề mục có icon `20dp` + `Hanken Grotesk 18sp Bold` → Nội dung chi tiết bên trong (Bio, Mentorship Topics, Career History timeline, hoặc Form fields).
 
 ### 5.4. `CMP-04`: Navigation (Thanh điều hướng dưới & Bộ chuyển không gian)

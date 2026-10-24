@@ -926,12 +926,12 @@ class S05AlumniDetailScreen extends StatefulWidget {
 class _S05AlumniDetailScreenState extends State<S05AlumniDetailScreen> {
   bool _hasCalendarError = false;
 
-  /// US-11: Mở đường dẫn đặt lịch Google Calendar của Cựu sinh viên
+  /// US-11: Mở đường dẫn Google Calendar của Cựu sinh viên để xem lịch
   Future<void> _handleBookCalendar() async {
     // Trong thực tế gọi url_launcher: launchUrl(Uri.parse(alumni.calendarUrl))
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Opening Google Calendar booking slot (Tomorrow, 2:00 PM)...'),
+        content: Text('Opening Google Calendar public schedule link...'),
       ),
     );
   }
@@ -1374,7 +1374,7 @@ class _S06ChatRoomScreenState extends State<S06ChatRoomScreen> {
               minHeight: AppDimens.minTouchTarget,
             ),
             icon: const Icon(Icons.calendar_month, color: AppColors.primaryNavy),
-            tooltip: 'Open Google Calendar Booking (US-11)',
+            tooltip: 'View Google Calendar Schedule (US-11)',
             onPressed: () {},
           ),
           PopupMenuButton<String>(
@@ -1414,7 +1414,7 @@ class _S06ChatRoomScreenState extends State<S06ChatRoomScreen> {
                   ),
                   const SizedBox(height: AppDimens.space12),
                   _buildIncomingBubble(
-                    'Chào Trung! Anh rất sẵn lòng hỗ trợ. Em có thể đặt lịch 30 phút vào chiều mai qua Google Calendar bên dưới để anh review CV luôn nhé!',
+                    'Chào Trung! Anh rất sẵn lòng hỗ trợ. Em có thể xem link Google Calendar bên dưới để biết khung giờ anh rảnh rồi nhắn tin trao đổi nhé!',
                     '10:18 AM',
                   ),
                   const SizedBox(height: AppDimens.space12),
@@ -1720,3 +1720,649 @@ class _S06ChatRoomScreenState extends State<S06ChatRoomScreen> {
 | **S04**<br>*(TV2)* | Scaffold + SearchHeader (52dp) + FilterChips 48dp + SwitchRow [ON] 48dp + ListView AlumniCard + BottomNav 64dp | CMP-02 (Search, Chip ✓, Switch [ON]), CMP-03, CMP-01, CMP-04 | Default Results, CMP-07 Skeleton, CMP-08 No Match + Reset Filters, CMP-09 Error | Gõ tìm kiếm (debounce 300ms), bật/tắt Chip (✓), gạt Switch [ON]/[OFF] | Tab 2 Root; chạm thẻ hoặc View Profile → S05; chạm Message → S06 | FilterChip cao 48dp có showCheckmark: true (D04, D05); chuyển GridView 2 cột khi ≥ 600dp |
 | **S07**<br>*(TV4)* | Scaffold + AppBar + NetworkErrorBanner + AcademicCard (Locked) + EditBioForm + CalendarLinkCard + BottomNav | CMP-09 (Banner + Retry 48dp & Inline Error), CMP-03, CMP-02, CMP-01 | Clean Form, Inline URL Error (#DC2626), Network Error (Preserved State), Saved SnackBar | Sửa Bio/Skills, kiểm tra Regex URL calendar.google.com, bấm ↻ Retry Save (48dp) | Tab 4 Root; bấm Privacy & Security → (48dp) → S08 | Không lộ mã US-xx (D03); giữ nguyên TextEditingController khi mất mạng (D06) |
 | **S08**<br>*(TV4)* | Scaffold + DetailAppBar 56dp + PrivacyCard (5 Switches) + SecurityCard (Pass & Blocked) + LogoutButton 52dp | CMP-05, CMP-02 (Switch + [ON]/[OFF] Badge), CMP-03, CMP-01 (Destructive) | Default (3 [ON], 2 [OFF]), Unblock Modal, Sync Error Rollback, Logout Dialog | Gạt 5 công tắc Privacy, mở Change Password, mở Manage & Unblock (2 accounts), bấm Log Out | Từ S07 sang; Back về S07; Log Out xóa session về S01 | 100% Switch có nhãn chữ **[ON] / [OFF]** (D05 — Critical B4); mỗi hàng cao 56dp |
+
+
+---
+
+## 10. Bàn giao Mã nguồn Lập trình Flutter Màn hình S07 & S08 (Do TV4 Đỗ Trọng Tín Chủ trì)
+
+Dưới đây là mã nguồn Dart chuẩn production cho 2 màn hình thuộc quyền sở hữu của **TV4 (Đỗ Trọng Tín — SE190218)**, hiện thực hóa 100% các quyết định thiết kế `D03` (xóa mã kỹ thuật), `D05` (Switch kèm nhãn `[ON]/[OFF]`), `D06` (Network Error Banner & Google Calendar URL Validation) và chuẩn trợ năng WCAG 2.2 AA.
+
+### 10.1. Mã nguồn Màn hình S07: `lib/features/profile/presentation/screens/my_profile_screen.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
+
+class MyProfileScreen extends StatefulWidget {
+  const MyProfileScreen({super.key});
+
+  @override
+  State<MyProfileScreen> createState() => _MyProfileScreenState();
+}
+
+class _MyProfileScreenState extends State<MyProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _headlineController;
+  late final TextEditingController _githubController;
+  late final TextEditingController _calendarController;
+
+  bool _hasNetworkError = true; // Trạng thái mô phỏng rớt mạng (D06)
+  bool _isSaving = false;
+  final List<String> _skills = ['Golang', 'Java', 'Docker'];
+
+  @override
+  void initState() {
+    super.initState();
+    _headlineController = TextEditingController(text: 'Year 3 SE Student • Seeking Backend OJT');
+    _githubController = TextEditingController(text: 'https://github.com/trungtc-se193059');
+    _calendarController = TextEditingController(text: 'http://calendar.google.com/my-link');
+  }
+
+  @override
+  void dispose() {
+    _headlineController.dispose();
+    _githubController.dispose();
+    _calendarController.dispose();
+    super.dispose();
+  }
+
+  String? _validateCalendarUrl(String? value) {
+    if (value == null || value.trim().isEmpty) return null;
+    final uri = Uri.tryParse(value.trim());
+    if (uri == null || !uri.hasScheme || uri.scheme != 'https') {
+      return 'Invalid URL | Must start with https://calendar.app.google/ or https://calendar.google.com/';
+    }
+    if (!uri.host.contains('calendar.google.com') && !uri.host.contains('calendar.app.google')) {
+      return 'Chỉ chấp nhận đường dẫn lịch Google Calendar hợp lệ.';
+    }
+    return null;
+  }
+
+  Future<void> _handleSave() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isSaving = true);
+    await Future.delayed(const Duration(milliseconds: 600));
+    if (mounted) {
+      setState(() {
+        _isSaving = false;
+        _hasNetworkError = false; // Đã đồng bộ thành công
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Đã lưu hồ sơ cá nhân và cập nhật link Google Calendar!'),
+          backgroundColor: AppColors.emeraldGreen,
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundLight,
+      appBar: AppBar(
+        backgroundColor: AppColors.surfaceWhite,
+        elevation: 0,
+        title: const Text('My Profile & Mentorship', style: AppTypography.h2Bold),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Semantics(
+              button: true,
+              label: 'Mở trang cài đặt bảo mật và quyền riêng tư',
+              child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(110, 48), // Vùng chạm ≥ 48dp
+                  side: const BorderSide(color: AppColors.fptNavy),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                ),
+                onPressed: () => Navigator.pushNamed(context, '/privacy-security'),
+                icon: const Icon(Icons.shield_outlined, size: 18, color: AppColors.fptNavy),
+                label: const Text('Security →', style: TextStyle(color: AppColors.fptNavy, fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 1. Network Error Banner (D06 / Heuristic #9 Recovery)
+              if (_hasNetworkError) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.dangerRedLight,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.Border.all(color: AppColors.dangerRed, width: 1.5),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.warning_amber_rounded, color: AppColors.dangerRed, size: 28),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Unable to sync changes. Network connection timed out while updating Google Calendar link.',
+                          style: AppTypography.caption.copyWith(color: AppColors.textPrimary, height: 1.4),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.dangerRed,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(100, 48), // Touch target ≥ 48dp
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: _handleSave,
+                        icon: const Icon(Icons.refresh, size: 18),
+                        label: const Text('Retry Save', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+
+              // 2. Academic Identity Card (Khóa cứng - Read Only)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceWhite,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.borderGray),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 26,
+                          backgroundColor: AppColors.fptNavy,
+                          child: const Text('TC', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Truong Chi Trung', style: AppTypography.h2Bold),
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFECFDF5),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.check_circle_outline, size: 14, color: AppColors.emeraldGreen),
+                                    SizedBox(width: 4),
+                                    Text('Verified FPT Student', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.emeraldGreen)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.lock_outline, size: 18, color: AppColors.textSecondary),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Academic ID: Cohort K19 • SE193059 • Software Engineering • Hola Campus\nVerified via FPT SSO (@fpt.edu.vn)',
+                              style: TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.4),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // 3. Career & Mentorship Form (US-04)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceWhite,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.borderGray),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Career & Mentorship Profile', style: AppTypography.h2Bold),
+                    const SizedBox(height: 16),
+                    const Text('Headline / OJT Goal', style: AppTypography.bodyMediumSemiBold),
+                    const SizedBox(height: 6),
+                    TextFormField(
+                      controller: _headlineController,
+                      style: AppTypography.bodyLarge,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.edit_outlined, size: 20),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('GitHub / Portfolio Link', style: AppTypography.bodyMediumSemiBold),
+                    const SizedBox(height: 6),
+                    TextFormField(
+                      controller: _githubController,
+                      style: AppTypography.bodyLarge,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.code, size: 20),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('Mentorship Topic & Technical Skills', style: AppTypography.bodyMediumSemiBold),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        ..._skills.map((skill) => Chip(
+                          label: Text(skill, style: const TextStyle(fontSize: 14)),
+                          backgroundColor: const Color(0xFFEFF6FF),
+                          deleteIcon: const Icon(Icons.close, size: 16),
+                          onDeleted: () => setState(() => _skills.remove(skill)),
+                        )),
+                        ActionChip(
+                          avatar: const Icon(Icons.add, size: 18),
+                          label: const Text('Add Skill', style: TextStyle(fontSize: 14)),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // 4. Google Calendar Appointment Link Card (US-11)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceWhite,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.borderGray),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.calendar_month_outlined, color: AppColors.fptNavy),
+                        SizedBox(width: 8),
+                        Text('Google Calendar Appointment Link', style: AppTypography.h2Bold),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Chia sẻ link lịch Google Calendar cá nhân để bạn học và cựu sinh viên biết thời gian rảnh trước khi gửi tin nhắn kết nối.',
+                      style: AppTypography.bodyMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _calendarController,
+                      validator: _validateCalendarUrl,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        hintText: 'https://calendar.google.com/calendar/appointments/...',
+                        border: const OutlineInputBorder(),
+                        errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColors.dangerRed, width: 1.5)),
+                        focusedErrorBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColors.dangerRed, width: 2)),
+                        errorMaxLines: 2,
+                        suffixIcon: const Icon(Icons.error_outline, color: AppColors.dangerRed),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.fptOrange,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size.fromHeight(52), // Touch target ≥ 48dp
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      onPressed: _isSaving ? null : _handleSave,
+                      icon: _isSaving
+                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                          : const Icon(Icons.save_outlined),
+                      label: Text(_isSaving ? 'Saving...' : 'Save Profile Changes', style: AppTypography.buttonPrimary),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+---
+
+### 10.2. Mã nguồn Màn hình S08: `lib/features/profile/presentation/screens/privacy_security_screen.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
+
+class PrivacySecurityScreen extends StatefulWidget {
+  const PrivacySecurityScreen({super.key});
+
+  @override
+  State<PrivacySecurityScreen> createState() => _PrivacySecurityScreenState();
+}
+
+class _PrivacySecurityScreenState extends State<PrivacySecurityScreen> {
+  // 5 Công tắc riêng tư (US-09 / Quyết định D05)
+  bool _showCompany = true;
+  bool _showEmail = false;
+  bool _showPhone = false;
+  bool _openMentorship = true;
+  bool _allowDirectMessages = true;
+
+  final List<String> _blockedUsers = [
+    'Trần Quốc Tuấn (K17 - SE)',
+    'Nguyễn Minh B (K18 - AI)',
+  ];
+
+  void _showUnblockDialog(String userName) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Column(
+          children: [
+            Icon(Icons.shield_outlined, color: AppColors.dangerRed, size: 40),
+            SizedBox(height: 12),
+            Text('Xác nhận bỏ chặn người dùng?', textAlign: TextAlign.center, style: AppTypography.h2Bold),
+          ],
+        ),
+        content: Text(
+          'Sau khi bỏ chặn, $userName có thể xem lại hồ sơ công khai và gửi tin nhắn trao đổi trực tiếp cho bạn.',
+          textAlign: TextAlign.center,
+          style: AppTypography.bodyMedium,
+        ),
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
+        actions: [
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(110, 48), // Touch target ≥ 48dp
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Hủy', style: TextStyle(color: AppColors.textPrimary)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.dangerRed,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(120, 48),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: () {
+              setState(() => _blockedUsers.remove(userName));
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Đã bỏ chặn $userName!'), backgroundColor: AppColors.emeraldGreen),
+              );
+            },
+            child: const Text('Bỏ chặn', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Đăng xuất tài khoản?'),
+        content: const Text('Phiên đăng nhập hiện tại sẽ bị hủy và bạn cần đăng nhập lại.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Hủy')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.dangerRed, foregroundColor: Colors.white),
+            onPressed: () {
+              Navigator.pop(ctx);
+              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+            },
+            child: const Text('Đăng xuất'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPrivacySwitchTile({
+    required String title,
+    required String subtitle,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppTypography.bodyMediumSemiBold),
+                const SizedBox(height: 2),
+                Text(subtitle, style: AppTypography.caption.copyWith(color: AppColors.textSecondary)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Huy hiệu chữ [ON]/[OFF] bắt buộc theo WCAG 2.2 SC 1.4.1 (D05)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: value ? const Color(0xFFECFDF5) : const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: value ? AppColors.emeraldGreen : AppColors.borderGray),
+            ),
+            child: Text(
+              value ? '[ON]' : '[OFF]',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: value ? AppColors.emeraldGreen : AppColors.textSecondary,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Semantics(
+            toggled: value,
+            label: '$title: ${value ? "Bật" : "Tắt"}',
+            child: Switch(
+              value: value,
+              activeColor: AppColors.emeraldGreen,
+              onChanged: onChanged,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundLight,
+      appBar: AppBar(
+        backgroundColor: AppColors.surfaceWhite,
+        elevation: 0,
+        title: const Text('Privacy & Security Settings', style: AppTypography.h2Bold),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // 1. Field-Level Privacy Controls Card (US-09)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceWhite,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.borderGray),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.shield_outlined, color: AppColors.fptNavy),
+                      SizedBox(width: 8),
+                      Text('Field-Level Privacy Controls (US-09)', style: AppTypography.h2Bold),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Kiểm soát ai có thể nhìn thấy thông tin của bạn. Mỗi công tắc có nhãn [ON]/[OFF] rõ ràng.',
+                    style: AppTypography.caption,
+                  ),
+                  const Divider(height: 24),
+                  _buildPrivacySwitchTile(
+                    title: 'Show Current Company & Role',
+                    subtitle: 'Visible to verified FPT students & alumni',
+                    value: _showCompany,
+                    onChanged: (v) => setState(() => _showCompany = v),
+                  ),
+                  _buildPrivacySwitchTile(
+                    title: 'Show Personal Email Address',
+                    subtitle: 'Hide your email from public directory',
+                    value: _showEmail,
+                    onChanged: (v) => setState(() => _showEmail = v),
+                  ),
+                  _buildPrivacySwitchTile(
+                    title: 'Show Phone Number',
+                    subtitle: 'Only shared when you send it in chat',
+                    value: _showPhone,
+                    onChanged: (v) => setState(() => _showPhone = v),
+                  ),
+                  _buildPrivacySwitchTile(
+                    title: 'Open for 1-on-1 Mentorship',
+                    subtitle: 'Display Google Calendar link on profile',
+                    value: _openMentorship,
+                    onChanged: (v) => setState(() => _openMentorship = v),
+                  ),
+                  _buildPrivacySwitchTile(
+                    title: 'Allow Direct Messages from All Cohorts',
+                    subtitle: 'Let K18–K20 students send OJT questions',
+                    value: _allowDirectMessages,
+                    onChanged: (v) => setState(() => _allowDirectMessages = v),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // 2. Security & Moderation Card (US-07, US-10)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceWhite,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.borderGray),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Security & Moderation', style: AppTypography.h2Bold),
+                  const SizedBox(height: 12),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const CircleAvatar(
+                      backgroundColor: Color(0xFFEFF6FF),
+                      child: Icon(Icons.key, color: AppColors.fptNavy),
+                    ),
+                    title: const Text('Change Account Password (US-07)', style: AppTypography.bodyMediumSemiBold),
+                    subtitle: const Text('Last updated 14 days ago', style: AppTypography.caption),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {},
+                  ),
+                  const Divider(),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const CircleAvatar(
+                      backgroundColor: Color(0xFFFEF2F2),
+                      child: Icon(Icons.block, color: AppColors.dangerRed),
+                    ),
+                    title: Text('Blocked Users (${_blockedUsers.length} accounts)', style: AppTypography.bodyMediumSemiBold),
+                    subtitle: Text(_blockedUsers.join(', '), style: AppTypography.caption, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    trailing: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(90, 48), // Touch target ≥ 48dp
+                        side: const BorderSide(color: AppColors.fptNavy),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                      onPressed: () {
+                        if (_blockedUsers.isNotEmpty) {
+                          _showUnblockDialog(_blockedUsers.first);
+                        }
+                      },
+                      child: const Text('Manage →', style: TextStyle(color: AppColors.fptNavy, fontSize: 13, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // 3. Log Out Button (US-08)
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(52), // Touch target ≥ 48dp
+                side: const BorderSide(color: AppColors.dangerRed, width: 1.5),
+                backgroundColor: const Color(0xFFFEF2F2),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: _showLogoutDialog,
+              icon: const Icon(Icons.logout, color: AppColors.dangerRed),
+              label: const Text('Log Out of Account (US-08)', style: TextStyle(color: AppColors.dangerRed, fontWeight: FontWeight.bold, fontSize: 15)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```

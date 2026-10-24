@@ -32,8 +32,8 @@ Bộ Persona được xây dựng từ 4 nguồn bằng chứng nghiên cứu đ
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │  P01: TRƯƠNG CHÍ TRUNG (Primary Persona — Priority: High)             │
-│  "Cần kết nối nhanh với Alumni ngành SE để review CV & xin lịch hẹn     │
-│   tư vấn OJT 1-1 mà không tốn thời gian nhắn tin chờ đợi."             │
+│  "Cần kết nối nhanh với Alumni ngành SE để review CV & xem lịch rảnh   │
+│   Google Calendar để chủ động liên hệ mà không mất thời gian."         │
 ├────────────────────────────────────────┬───────────────────────────────┤
 │  • Tuổi: 20 (Sinh năm 2006)            │  • Vai trò: Sinh viên Năm 3   │
 │  • Khóa: K19 | MSSV: SE193059          │  • Campus: FPT TP. Hồ Chí Minh│
@@ -47,7 +47,7 @@ Bộ Persona được xây dựng từ 4 nguồn bằng chứng nghiên cứu đ
 | **02** | **Persona Priority** | **Primary Persona (Ưu tiên cao nhất)**. Đây là nhóm người dùng mục tiêu cốt lõi của ứng dụng trong giai đoạn Lab 2, định hình trực tiếp luồng tìm kiếm danh bạ (`S04`), xem hồ sơ cựu SV (`S05`), xem lịch Google Calendar (`US-11`) và nhắn tin kết nối (`S06`). |
 | **03** | **Usage Context** | - **Địa điểm:** Sảnh tòa nhà Alpha/Beta FPTU HCMC, trạm xe bus tuyến 53, hoặc phòng trọ sinh viên.<br>- **Thời điểm:** Giờ nghỉ giữa 2 ca học (15 phút) hoặc buổi tối 20:00–22:00.<br>- **Thiết bị:** Smartphone Android màn hình 360×800 dp, cầm 1 tay bằng ngón cái.<br>- **Mức độ phân tán:** Cao, xung quanh ồn ào và ánh sáng mặt trời mạnh dễ gây lóa màn hình. |
 | **04** | **Goals (Kết quả mong muốn)** | 1. Tìm được ít nhất 2 cựu sinh viên FPT khóa K12–K15 đang làm Tech Lead / Senior Backend tại các doanh nghiệp công nghệ lớn (VNG, FPT Software, Grab).<br>2. Xem được lịch rảnh thực tế của Mentor để chủ động gửi yêu cầu kết nối mà không làm phiền giờ làm việc.<br>3. Được mentor góp ý CV thực tập và định hướng kiến trúc Microservices/Golang trước kỳ phỏng vấn OJT. |
-| **05** | **Job to Be Done (JTBD)** | **“Khi chuẩn bị nộp hồ sơ thực tập OJT, tôi muốn xem được hồ sơ chi tiết và đường dẫn Google Calendar của đàn anh cựu sinh viên cùng ngành để chủ động hẹn lịch tư vấn 1-1 đúng lúc mà không phải chờ đợi nhắn tin qua lại.”** |
+| **05** | **Job to Be Done (JTBD)** | **“Khi chuẩn bị nộp hồ sơ thực tập OJT, tôi muốn xem được hồ sơ chi tiết và đường dẫn Google Calendar của đàn anh cựu sinh viên cùng ngành để chủ động nhắn tin trao đổi đúng lúc mà không phải chờ đợi nhắn tin qua lại nhiều lần.”** |
 | **06** | **Current Behaviors & Workarounds** | - Hiện tại: Đăng bài hỏi xin review CV trên các group Facebook sinh viên (FPTU K19, Hội đồng hương FPT) nhưng thường xuyên bị trôi bài, lẫn vào tin rao vặt nhà trọ.<br>- Tìm kiếm profile cựu SV trên LinkedIn nhưng ít khi được phản hồi vì cựu SV không kiểm tra tin nhắn của người lạ thường xuyên. |
 | **07** | **Pain Points** | - **Không biết ai là cựu SV thật sự:** Nhiều tài khoản ảo trên mạng xã hội không kiểm chứng được chuyên ngành và khóa học FPT.<br>- **Ngại làm phiền giờ hành chính:** Không nắm được lịch rảnh/bận của cựu sinh viên nên ngần ngại nhắn tin liên hệ.<br>- **Giao diện di động khó bấm:** Các nút filter hoặc nút CTA quá nhỏ dưới 40dp khiến ngón cái hay bị chạm nhầm khi đang đi bộ. |
 | **08** | **Motivations** | - **Tốc độ & Tính chuẩn xác:** Muốn lọc đúng Campus HCMC + Major SE chỉ bằng 1–2 lần chạm.<br>- **Khát khao vượt qua kỳ OJT:** Mong muốn có một mentor uy tín bảo chứng kiến thức và hỗ trợ cơ hội Referral vào công ty tốt. |
@@ -66,8 +66,8 @@ Bộ Persona được xây dựng từ 4 nguồn bằng chứng nghiên cứu đ
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │  P02: ĐẶNG MINH TUẤN (Secondary Persona — Priority: Medium)            │
-│  "Sẵn sàng dành 1-2 tiếng cuối tuần tư vấn cho đàn em FPT, nhưng cần   │
-│   tự động hóa lịch hẹn và tuyệt đối bảo vệ số điện thoại cá nhân."     │
+│  "Sẵn sàng dành 1-2 tiếng cuối tuần chia sẻ kinh nghiệm cho đàn em,    │
+│   chỉ cần add link Calendar và bảo vệ tuyệt đối thông tin cá nhân."    │
 ├────────────────────────────────────────┬───────────────────────────────┤
 │  • Tuổi: 26 (Tốt nghiệp K12/K15)       │  • Vai trò: Tech Lead / Mentor│
 │  • Khóa: K12 | MSSV: SE04821           │  • Doanh nghiệp: VNG Corp     │
@@ -80,8 +80,8 @@ Bộ Persona được xây dựng từ 4 nguồn bằng chứng nghiên cứu đ
 | **01** | **Identity & Archetype** | **Đặng Minh Tuấn** — Nhóm hành vi: *Cựu sinh viên thành đạt, bận rộn, chia sẻ kinh nghiệm thiện nguyện và bảo vệ quyền riêng tư nghiêm ngặt*. |
 | **02** | **Persona Priority** | **Secondary Persona 1**. Đại diện cho phía cung cấp giá trị (Mentor/Alumni), quyết định cấu trúc màn hình hồ sơ thành viên (`S05`), cơ chế nhúng lịch Google Calendar (`US-11`), bảng điều khiển công tắc riêng tư (`S08 - US-09`) và tính năng chặn quấy rối (`US-10`). |
 | **03** | **Usage Context** | - **Địa điểm:** Văn phòng công ty công nghệ (giờ nghỉ trưa) hoặc tại nhà riêng vào tối cuối tuần.<br>- **Thời điểm:** 12:30–13:00 hoặc thứ Bảy, Chủ Nhật.<br>- **Thiết bị:** Smartphone cao cấp (iPhone / Pixel), kết nối Wifi/5G tốc độ cao.<br>- **Mức độ phân tán:** Thấp đến trung bình; thao tác tập trung, yêu cầu tính riêng tư và chuyên nghiệp. |
-| **04** | **Goals (Kết quả mong muốn)** | 1. Cập nhật đường dẫn lịch hẹn Google Calendar cá nhân lên Profile một cách an toàn để sinh viên tự chọn giờ phù hợp.<br>2. Kiểm soát tuyệt đối thông tin hiển thị (ẩn số điện thoại, ẩn email cá nhân, chỉ giữ thông báo qua ứng dụng).<br>3. Có quyền chặn ngay lập tức bất kỳ tài khoản sinh viên nào có hành vi spam hoặc quấy rối ngoài giờ hẹn. |
-| **05** | **Job to Be Done (JTBD)** | **“Khi tham gia chia sẻ kinh nghiệm cho sinh viên, tôi muốn nhúng link Google Calendar cá nhân lên Profile và ẩn số điện thoại riêng tư để đàn em tự chọn lịch hẹn phù hợp mà không làm phiền đến cuộc sống cá nhân của tôi.”** |
+| **04** | **Goals (Kết quả mong muốn)** | 1. Cập nhật đường dẫn Google Calendar cá nhân lên Profile một cách an toàn để sinh viên xem thời gian rảnh khi cần liên hệ.<br>2. Kiểm soát tuyệt đối thông tin hiển thị (ẩn số điện thoại, ẩn email cá nhân, chỉ giữ thông báo qua ứng dụng).<br>3. Có quyền chặn ngay lập tức bất kỳ tài khoản sinh viên nào có hành vi spam hoặc quấy rối. |
+| **05** | **Job to Be Done (JTBD)** | **“Khi tham gia chia sẻ kinh nghiệm cho sinh viên, tôi muốn nhúng link Google Calendar cá nhân lên Profile và ẩn số điện thoại riêng tư để đàn em chủ động xem giờ rảnh tham khảo trước khi nhắn tin trao đổi mà không làm phiền đến cuộc sống cá nhân của tôi.”** |
 | **06** | **Current Behaviors & Workarounds** | - Thỉnh thoảng nhận lời tham gia talkshow của câu lạc bộ trường nhưng không duy trì được kênh kết nối 1-1 lâu dài.<br>- Từ chối cho số điện thoại cá nhân cho người lạ vì sợ bị thêm vào các nhóm chat bán hàng hoặc nhờ làm bài tập hộ. |
 | **07** | **Pain Points** | - **Bị quấy rối ngoài giờ:** Từng bị lộ thông tin cá nhân khiến người lạ gọi điện/nhắn tin vào đêm muộn.<br>- **Mất thời gian sắp xếp lịch:** Phải nhắn tin qua lại hàng chục tin chỉ để chốt một buổi rảnh 30 phút với sinh viên.<br>- **Tính năng Chặn bị giấu kín:** Các app khác thường giấu nút Block vào menu phụ 3 chấm khó tìm, không mang lại cảm giác an toàn. |
 | **08** | **Motivations** | - **Tinh thần trả ơn cộng đồng (Alumni Giving Back):** Nhớ ơn các thế hệ anh chị khóa trước từng dẫn dắt mình thời sinh viên.<br>- **Tìm kiếm nhân tài:** Muốn tìm các bạn sinh viên FPT có năng lực xuất sắc để giới thiệu tuyển dụng (Referral) vào đội ngũ của mình. |
@@ -134,7 +134,7 @@ Bảng ánh xạ trực tiếp từ nhu cầu, rào cản của từng Persona s
 | Persona | Nhu cầu Thực tế / Trở ngại Cốt lõi | Quyết định Thiết kế UI Cụ thể | Màn hình Áp dụng | Phương pháp Kiểm chứng (Verification) |
 | :--- | :--- | :--- | :---: | :--- |
 | **`P01` (Trung)** | Thao tác 1 tay khi đi bộ, sảnh trường chói nắng, mắt cận thị. | - Mọi nút bấm, ô nhập, filter chip đều đạt vùng chạm tối thiểu **`48×48 dp`**.<br>- Chữ phụ dùng màu Slate `#595959` đạt tỷ lệ tương phản **`7.0:1`** (vượt xa chuẩn WCAG AA 4.5:1). | `S01 → S08` | Chạy audit bằng công cụ Figma Contrast Checker và quan sát task test 1 tay trên điện thoại thật ngoài trời. |
-| **`P01` (Trung)** | Cần xem nhanh lịch rảnh của Mentor mà không che khuất bài viết. | - Quyết định **`D02`**: Xóa nút nổi FAB ở góc dưới, dùng nút viền `📅 Book 30m Slot` / `Xem Lịch Google Calendar` (`48dp`). | `S03, S05` | Đo thời gian tìm kiếm và mở lịch của sinh viên: Đạt dưới **90 giây** (mục tiêu ban đầu < 120 giây). |
+| **`P01` (Trung)** | Cần xem nhanh lịch rảnh của Mentor mà không che khuất bài viết. | - Quyết định **`D02 & D07`**: Xóa nút nổi FAB ở góc dưới; thay bằng nút CTA chính `💬 Nhắn tin trao đổi` (48dp) và nút phụ `📅 Xem Lịch rảnh tham khảo` (`US-11`). | `S03, S05` | Đo thời gian tìm kiếm và mở lịch của sinh viên: Đạt dưới **90 giây** (mục tiêu ban đầu < 120 giây). |
 | **`P02` (Tuấn)** | Bận rộn, sợ lộ số điện thoại riêng tư và quấy rối ngoài giờ. | - Quyết định **`D05`**: Toàn bộ 5 công tắc trong `S08` đều có nhãn chữ tường minh **`[ON]` / `[OFF]`** cạnh switch.<br>- Quyết định **`D01`**: Nút **`🚫 Block This User`** màu đỏ `#DC2626` nằm ở cuối trang cá nhân `S05` có hộp thoại xác nhận rõ ràng. | `S05, S08` | Phỏng vấn thử nghiệm cựu SV: 100% cảm thấy an tâm vì nhận biết được ngay trạng thái bảo mật của mình. |
 | **`P03` (Lan)** | Tân sinh viên bỡ ngỡ, mạng ký túc xá yếu, sợ mất dữ liệu đã gõ. | - Quyết định **`D06`**: Bổ sung **Inline Validation Error** viền đỏ `#DC2626` và **Network Error Banner** ở đầu trang kèm nút bấm **`↻ Retry Save`** (`48dp`), bảo lưu 100% dữ liệu form trong cache. | `S07` | Thử nghiệm ngắt kết nối mạng giả lập khi bấm lưu: Người dùng chỉ cần bấm Retry khi có mạng lại mà không phải gõ lại. |
 

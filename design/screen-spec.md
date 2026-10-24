@@ -275,7 +275,7 @@ Khi người dùng nhấn *"Quên mật khẩu?"* từ `S01`, `S02` hiển thị
 
 > **Mã Màn hình:** `S03`  
 > **User Stories Bao phủ:** `US-05` (Xem thông tin tác giả), `US-11` (Chia sẻ lịch rảnh tham khảo), `US-22..US-37` (Thảo luận cộng đồng, Sự kiện Seminar cựu sinh viên)  
-> **Quyết định Thiết kế Áp dụng:** **`D02`** (Loại bỏ nút nổi FAB ở góc dưới phải để không che khuất bài viết; nút hành động trong thẻ bài viết dùng kiểu `Secondary-Outlined #1B365D` với nhãn **`💬 Nhắn tin trao đổi`**, không dùng nút cam đặc cạnh tranh thị giác và tuyệt đối không có tính năng Booking 1-1).  
+> **Quyết định Thiết kế Áp dụng:** **`D02`** (Loại bỏ nút nổi FAB ở góc dưới phải để không che khuất bài viết; nút hành động trong thẻ bài viết dùng kiểu `Secondary-Outlined #1B365D` với nhãn **`💬 Nhắn tin trao đổi`**, không dùng nút cam đặc cạnh tranh thị giác).  
 > **Ảnh Minh chứng Giao diện (`assets/figma/s03.png`):**  
 > ![S03 Home Feed](../assets/figma/s03.png)
 
@@ -317,7 +317,7 @@ Khi người dùng nhấn *"Quên mật khẩu?"* từ `S01`, `S02` hiển thị
 
 > **Mã Màn hình:** `S05`  
 > **User Stories Bao phủ:** `US-05` (Xem hồ sơ công khai chi tiết), `US-11` (Xem đường dẫn lịch rảnh Google Calendar tham khảo), `US-10` (Chặn người dùng làm phiền)  
-> **Quyết định Thiết kế Áp dụng:** **`D01`** (Chỉ giữ 1 thanh AppBar duy nhất cao `56dp`, đưa nút `🚫 Chặn người dùng này` màu đỏ `#DC2626` xuống cuối trang kèm Dialog xác nhận), **`D07` & `CD-03`** (**Loại bỏ hoàn toàn tính năng Booking 1-1**; đặt nút **`💬 Nhắn tin trao đổi (Direct Message)`** làm Primary CTA màu cam `#F27024` cao `56dp`, và định vị Google Calendar `US-11` đúng bản chất là nút phụ viền Navy **`📅 Xem Lịch rảnh tham khảo (Google Calendar)`** cao `48dp`).  
+> **Quyết định Thiết kế Áp dụng:** **`D01`** (Chỉ giữ 1 thanh AppBar duy nhất cao `56dp`, đưa nút `🚫 Chặn người dùng này` màu đỏ `#DC2626` xuống cuối trang kèm Dialog xác nhận), **`D07` & `CD-03`** (Đặt nút **`💬 Nhắn tin trao đổi (Direct Message)`** làm Primary CTA màu cam `#F27024` cao `56dp`, và định vị Google Calendar `US-11` đúng bản chất là nút phụ viền Navy **`📅 Xem Lịch rảnh tham khảo (Google Calendar)`** cao `48dp`).  
 > **Ảnh Minh chứng Giao diện (`assets/figma/s05.png`):**  
 > ![S05 Member Public Profile](../assets/figma/s05.png)
 
@@ -330,7 +330,7 @@ Khi người dùng nhấn *"Quên mật khẩu?"* từ `S01`, `S02` hiển thị
 | **3. States (Trạng thái)** | - **Default State:** Hiển thị đầy đủ hồ sơ công khai, nút `Nhắn tin trao đổi` và nút `Xem Lịch rảnh tham khảo`.<br>- **Loading State (`CMP-07`):** Khung `Skeleton-Profile` khi đang tải dữ liệu cựu sinh viên.<br>- **No Calendar Link State (`Empty Variant`):** Nếu thành viên chưa cập nhật link lịch ở `S07`, nút `Xem Lịch rảnh tham khảo` chuyển sang trạng thái `Disabled` (`#F1F5F9`, chữ `#595959`: *"Chưa đính kèm lịch Google Calendar"*), chỉ giữ nút `💬 Nhắn tin trao đổi`.<br>- **Block Confirmation Dialog State (`CMP-06 Overlay`):** Hiển thị hộp thoại xác nhận *"Chặn Đặng Minh Tuấn?"* với 2 nút `Hủy` (`48dp`) và `Xác nhận Chặn` (`48dp`, `#DC2626`). |
 | **4. Interactions** | - Chạm **`💬 Nhắn tin trao đổi (Direct Message)`**: Chuyển ngay sang màn hình `S06 Chat Room` kèm ngữ cảnh chủ đề OJT.<br>- Chạm **`📅 Xem Lịch rảnh tham khảo (Google Calendar)`**: Gọi `url_launcher` mở Custom Tab / WebView hiển thị lịch rảnh Google Calendar của cựu sinh viên (`US-11`).<br>- Chạm **`🚫 Chặn người dùng này`**: Mở `CMP-06 Confirmation Dialog` → Bấm `Xác nhận Chặn` sẽ thêm vào danh sách chặn ở `S08` và quay về `S04`. |
 | **5. Navigation** | - Nhận điều hướng từ `S03 Home Feed` hoặc `S04 Directory`.<br>- Nút `← Back` (`48×48dp`): Quay lại màn hình trước đó (`Navigator.pop`).<br>- Nút `💬 Nhắn tin trao đổi`: Điều hướng sang `S06`. |
-| **6. UI Constraints** | - Tuyệt đối **không có 2 thanh Back header chồng nhau** (`D01`).<br>- Tuyệt đối **không có form đặt lịch hẹn 1-1 hay chấm sao đánh giá** (`D07`).<br>- Nút `Chặn người dùng này` phải tách biệt ở cuối trang để tránh bấm nhầm với các nút kết nối. |
+| **6. UI Constraints** | - Tuyệt đối **không có 2 thanh Back header chồng nhau** (`D01`).<br>- Tuyệt đối **không có form thu phí hay chấm sao đánh giá** (`D07`).<br>- Nút `Chặn người dùng này` phải tách biệt ở cuối trang để tránh bấm nhầm với các nút kết nối. |
 
 ---
 
@@ -338,7 +338,7 @@ Khi người dùng nhấn *"Quên mật khẩu?"* từ `S01`, `S02` hiển thị
 
 > **Mã Màn hình:** `S06`  
 > **User Stories Bao phủ:** `US-12..US-21` (Nhắn tin trao đổi trực tiếp 1-1, đính kèm tài liệu CV, xem trạng thái trực tuyến/đã xem), `US-05` (Xem nhanh hồ sơ), `US-10` (Chặn người dùng từ menu phòng chat), `US-11` (Mở nhanh lịch rảnh tham khảo)  
-> **Quyết định Thiết kế Áp dụng:** **`CD-04`** (Gắn thanh `Sticky Mentorship Context Banner` ở đầu phòng chat + thẻ đính kèm file **`📄 CV_TruongChiTrung_K19_SE.pdf`** + dải `Quick Icebreaker Chips` cao `48dp` phía trên ô nhập tin nhắn; **bỏ hoàn toàn card xác nhận đặt lịch hẹn 1-1**).  
+> **Quyết định Thiết kế Áp dụng:** **`CD-04`** (Gắn thanh `Sticky Mentorship Context Banner` ở đầu phòng chat + thẻ đính kèm file **`📄 CV_TruongChiTrung_K19_SE.pdf`** + dải `Quick Icebreaker Chips` cao `48dp` phía trên ô nhập tin nhắn; **tối ưu hóa hội thoại trực tiếp**).  
 > **Ảnh Minh chứng Giao diện (`assets/figma/s06.png`):**  
 > ![S06 Direct Mentorship Chat Room](../assets/figma/s06.png)
 
