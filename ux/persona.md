@@ -32,8 +32,8 @@ Bộ Persona được xây dựng từ 4 nguồn bằng chứng nghiên cứu đ
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │  P01: TRƯƠNG CHÍ TRUNG (Primary Persona — Priority: High)             │
-│  "Cần kết nối nhanh với Alumni ngành SE để review CV & xin lịch hẹn     │
-│   tư vấn OJT 1-1 mà không tốn thời gian nhắn tin chờ đợi."             │
+│  "Cần kết nối nhanh với Alumni ngành SE để review CV & xem lịch rảnh   │
+│   Google Calendar để chủ động liên hệ mà không mất thời gian."         │
 ├────────────────────────────────────────┬───────────────────────────────┤
 │  • Tuổi: 20 (Sinh năm 2006)            │  • Vai trò: Sinh viên Năm 3   │
 │  • Khóa: K19 | MSSV: SE193059          │  • Campus: FPT TP. Hồ Chí Minh│
@@ -66,8 +66,8 @@ Bộ Persona được xây dựng từ 4 nguồn bằng chứng nghiên cứu đ
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │  P02: ĐẶNG MINH TUẤN (Secondary Persona — Priority: Medium)            │
-│  "Sẵn sàng dành 1-2 tiếng cuối tuần tư vấn cho đàn em FPT, nhưng cần   │
-│   tự động hóa lịch hẹn và tuyệt đối bảo vệ số điện thoại cá nhân."     │
+│  "Sẵn sàng dành 1-2 tiếng cuối tuần chia sẻ kinh nghiệm cho đàn em,    │
+│   chỉ cần add link Calendar và bảo vệ tuyệt đối thông tin cá nhân."    │
 ├────────────────────────────────────────┬───────────────────────────────┤
 │  • Tuổi: 26 (Tốt nghiệp K12/K15)       │  • Vai trò: Tech Lead / Mentor│
 │  • Khóa: K12 | MSSV: SE04821           │  • Doanh nghiệp: VNG Corp     │
@@ -80,7 +80,7 @@ Bộ Persona được xây dựng từ 4 nguồn bằng chứng nghiên cứu đ
 | **01** | **Identity & Archetype** | **Đặng Minh Tuấn** — Nhóm hành vi: *Cựu sinh viên thành đạt, bận rộn, chia sẻ kinh nghiệm thiện nguyện và bảo vệ quyền riêng tư nghiêm ngặt*. |
 | **02** | **Persona Priority** | **Secondary Persona 1**. Đại diện cho phía cung cấp giá trị (Mentor/Alumni), quyết định cấu trúc màn hình hồ sơ thành viên (`S05`), cơ chế nhúng lịch Google Calendar (`US-11`), bảng điều khiển công tắc riêng tư (`S08 - US-09`) và tính năng chặn quấy rối (`US-10`). |
 | **03** | **Usage Context** | - **Địa điểm:** Văn phòng công ty công nghệ (giờ nghỉ trưa) hoặc tại nhà riêng vào tối cuối tuần.<br>- **Thời điểm:** 12:30–13:00 hoặc thứ Bảy, Chủ Nhật.<br>- **Thiết bị:** Smartphone cao cấp (iPhone / Pixel), kết nối Wifi/5G tốc độ cao.<br>- **Mức độ phân tán:** Thấp đến trung bình; thao tác tập trung, yêu cầu tính riêng tư và chuyên nghiệp. |
-| **04** | **Goals (Kết quả mong muốn)** | 1. Cập nhật đường dẫn lịch hẹn Google Calendar cá nhân lên Profile một cách an toàn để sinh viên tự chọn giờ phù hợp.<br>2. Kiểm soát tuyệt đối thông tin hiển thị (ẩn số điện thoại, ẩn email cá nhân, chỉ giữ thông báo qua ứng dụng).<br>3. Có quyền chặn ngay lập tức bất kỳ tài khoản sinh viên nào có hành vi spam hoặc quấy rối ngoài giờ hẹn. |
+| **04** | **Goals (Kết quả mong muốn)** | 1. Cập nhật đường dẫn Google Calendar cá nhân lên Profile một cách an toàn để sinh viên xem thời gian rảnh khi cần liên hệ.<br>2. Kiểm soát tuyệt đối thông tin hiển thị (ẩn số điện thoại, ẩn email cá nhân, chỉ giữ thông báo qua ứng dụng).<br>3. Có quyền chặn ngay lập tức bất kỳ tài khoản sinh viên nào có hành vi spam hoặc quấy rối. |
 | **05** | **Job to Be Done (JTBD)** | **“Khi tham gia chia sẻ kinh nghiệm cho sinh viên, tôi muốn nhúng link Google Calendar cá nhân lên Profile và ẩn số điện thoại riêng tư để đàn em chủ động xem giờ rảnh tham khảo trước khi nhắn tin trao đổi mà không làm phiền đến cuộc sống cá nhân của tôi.”** |
 | **06** | **Current Behaviors & Workarounds** | - Thỉnh thoảng nhận lời tham gia talkshow của câu lạc bộ trường nhưng không duy trì được kênh kết nối 1-1 lâu dài.<br>- Từ chối cho số điện thoại cá nhân cho người lạ vì sợ bị thêm vào các nhóm chat bán hàng hoặc nhờ làm bài tập hộ. |
 | **07** | **Pain Points** | - **Bị quấy rối ngoài giờ:** Từng bị lộ thông tin cá nhân khiến người lạ gọi điện/nhắn tin vào đêm muộn.<br>- **Mất thời gian sắp xếp lịch:** Phải nhắn tin qua lại hàng chục tin chỉ để chốt một buổi rảnh 30 phút với sinh viên.<br>- **Tính năng Chặn bị giấu kín:** Các app khác thường giấu nút Block vào menu phụ 3 chấm khó tìm, không mang lại cảm giác an toàn. |
@@ -134,7 +134,7 @@ Bảng ánh xạ trực tiếp từ nhu cầu, rào cản của từng Persona s
 | Persona | Nhu cầu Thực tế / Trở ngại Cốt lõi | Quyết định Thiết kế UI Cụ thể | Màn hình Áp dụng | Phương pháp Kiểm chứng (Verification) |
 | :--- | :--- | :--- | :---: | :--- |
 | **`P01` (Trung)** | Thao tác 1 tay khi đi bộ, sảnh trường chói nắng, mắt cận thị. | - Mọi nút bấm, ô nhập, filter chip đều đạt vùng chạm tối thiểu **`48×48 dp`**.<br>- Chữ phụ dùng màu Slate `#595959` đạt tỷ lệ tương phản **`7.0:1`** (vượt xa chuẩn WCAG AA 4.5:1). | `S01 → S08` | Chạy audit bằng công cụ Figma Contrast Checker và quan sát task test 1 tay trên điện thoại thật ngoài trời. |
-| **`P01` (Trung)** | Cần xem nhanh lịch rảnh của Mentor mà không che khuất bài viết. | - Quyết định **`D02 & D07`**: Xóa nút nổi FAB ở góc dưới; từ chối Book 30m Slot, thay bằng nút CTA chính `💬 Nhắn tin trao đổi` (48dp) và nút phụ `📅 Xem Lịch rảnh tham khảo` (`US-11`). | `S03, S05` | Đo thời gian tìm kiếm và mở lịch của sinh viên: Đạt dưới **90 giây** (mục tiêu ban đầu < 120 giây). |
+| **`P01` (Trung)** | Cần xem nhanh lịch rảnh của Mentor mà không che khuất bài viết. | - Quyết định **`D02 & D07`**: Xóa nút nổi FAB ở góc dưới; thay bằng nút CTA chính `💬 Nhắn tin trao đổi` (48dp) và nút phụ `📅 Xem Lịch rảnh tham khảo` (`US-11`). | `S03, S05` | Đo thời gian tìm kiếm và mở lịch của sinh viên: Đạt dưới **90 giây** (mục tiêu ban đầu < 120 giây). |
 | **`P02` (Tuấn)** | Bận rộn, sợ lộ số điện thoại riêng tư và quấy rối ngoài giờ. | - Quyết định **`D05`**: Toàn bộ 5 công tắc trong `S08` đều có nhãn chữ tường minh **`[ON]` / `[OFF]`** cạnh switch.<br>- Quyết định **`D01`**: Nút **`🚫 Block This User`** màu đỏ `#DC2626` nằm ở cuối trang cá nhân `S05` có hộp thoại xác nhận rõ ràng. | `S05, S08` | Phỏng vấn thử nghiệm cựu SV: 100% cảm thấy an tâm vì nhận biết được ngay trạng thái bảo mật của mình. |
 | **`P03` (Lan)** | Tân sinh viên bỡ ngỡ, mạng ký túc xá yếu, sợ mất dữ liệu đã gõ. | - Quyết định **`D06`**: Bổ sung **Inline Validation Error** viền đỏ `#DC2626` và **Network Error Banner** ở đầu trang kèm nút bấm **`↻ Retry Save`** (`48dp`), bảo lưu 100% dữ liệu form trong cache. | `S07` | Thử nghiệm ngắt kết nối mạng giả lập khi bấm lưu: Người dùng chỉ cần bấm Retry khi có mạng lại mà không phải gõ lại. |
 

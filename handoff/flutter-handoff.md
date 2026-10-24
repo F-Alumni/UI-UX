@@ -926,7 +926,7 @@ class S05AlumniDetailScreen extends StatefulWidget {
 class _S05AlumniDetailScreenState extends State<S05AlumniDetailScreen> {
   bool _hasCalendarError = false;
 
-  /// US-11: Mở đường dẫn đặt lịch Google Calendar của Cựu sinh viên
+  /// US-11: Mở đường dẫn Google Calendar của Cựu sinh viên để xem lịch
   Future<void> _handleBookCalendar() async {
     // Trong thực tế gọi url_launcher: launchUrl(Uri.parse(alumni.calendarUrl))
     ScaffoldMessenger.of(context).showSnackBar(
@@ -1414,7 +1414,7 @@ class _S06ChatRoomScreenState extends State<S06ChatRoomScreen> {
                   ),
                   const SizedBox(height: AppDimens.space12),
                   _buildIncomingBubble(
-                    'Chào Trung! Anh rất sẵn lòng hỗ trợ. Em có thể đặt lịch 30 phút vào chiều mai qua Google Calendar bên dưới để anh review CV luôn nhé!',
+                    'Chào Trung! Anh rất sẵn lòng hỗ trợ. Em có thể xem link Google Calendar bên dưới để biết khung giờ anh rảnh rồi nhắn tin trao đổi nhé!',
                     '10:18 AM',
                   ),
                   const SizedBox(height: AppDimens.space12),

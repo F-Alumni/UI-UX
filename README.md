@@ -72,7 +72,7 @@ UI-UX/
 │   └── ai-design-log.md           # Nhật ký Stitch v0, 3 vòng lặp có ý nghĩa, 7 phát hiện Heuristics & Quyết định
 │
 └── assets/                        # [Tài nguyên Hình ảnh Bằng chứng]
-    ├── figma/                     # Trọn bộ 8 ảnh chụp màn hình Mobile chính thức (s01.png -> s08.png, không có Booking 1-1)
+    ├── figma/                     # Trọn bộ 8 ảnh chụp màn hình Mobile chính thức (s01.png -> s08.png)
     └── stitch/                    # 15 ảnh chụp màn hình v0 và Before/After từ Google Stitch
         ├── v0_overview_all_4_screens.png
         ├── iter1_before.png / iter1_after.png

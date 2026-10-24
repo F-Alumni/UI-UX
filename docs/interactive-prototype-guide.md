@@ -41,7 +41,7 @@ Trên Figma Page 06, toàn bộ 8 màn hình chính (`S01` → `S08`) và 2 Fram
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
 | Icon `Directory (Tìm kiếm)` ở Bottom Bar | `S03` | On tap | Navigate to | `S04_loading_skeleton` | Instant | Chuyển sang tìm kiếm, kích hoạt skeleton |
 | **Cả Frame `S04_loading_skeleton`** | `S04_skeleton` | **After delay (800ms)** | **Navigate to** | **`S04 - Alumni Directory`** | **Dissolve (300ms)** | **Tiêu chí Rubric: Chuyển từ Skeleton sang kết quả thật** |
-| Thẻ `Dang Minh Tuan` (hoặc nút `Book Mentor →`) | `S04` | On tap | Navigate to | `S05 - Hồ sơ Cựu sinh viên` | Smart Animate (300ms) | Mở hồ sơ chi tiết Tech Lead VNG |
+| Thẻ `Dang Minh Tuan` (hoặc nút `Xem Hồ sơ →`) | `S04` | On tap | Navigate to | `S05 - Hồ sơ Cựu sinh viên` | Smart Animate (300ms) | Mở hồ sơ chi tiết Tech Lead VNG |
 | Nút phụ `📅 Xem Lịch rảnh tham khảo` | `S05` | On tap | Open link | `https://calendar.google.com/` | External URL | Xem lịch rảnh của Mentor (US-11) |
 | Nút chính `💬 Nhắn tin trao đổi` | `S05` | On tap | Navigate to | `S06 - Chat Room` | Smart Animate (300ms) | Mở phòng chat trao đổi và gửi file CV |
 | Mũi tên `←` (AppBar) | `S06` | On tap | Back | `S05` | Slide Right | Quay về hồ sơ cựu sinh viên |

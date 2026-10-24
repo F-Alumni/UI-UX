@@ -58,7 +58,7 @@ Toàn bộ màu sắc được khai báo dưới dạng **Figma Color Variables*
 | `brand/primary-navy` trên `brand/navy-tint` | `#1B365D` trên `#EEF2FF` | **10.68 : 1** | ≥ 4.5 : 1 (Chữ thường) | ✅ **PASS (AAA)** | Nút `Direct Message`, tag kỹ năng (`Go`, `Kubernetes`, `System Architecture`). |
 | `status/error-crimson` trên `surface/card` | `#DC2626` trên `#FFFFFF` | **4.83 : 1** | ≥ 4.5 : 1 (Chữ thường) | ✅ **PASS (AA)** | Thông báo lỗi dưới ô Google Calendar URL, nút `Block This User` (`D01`, `D06`). |
 | `status/error-crimson` trên `status/error-tint` | `#991B1B` / `#DC2626` trên `#FDF3F2` | **4.52 : 1 – 7.40 : 1** | ≥ 4.5 : 1 (Chữ thường) | ✅ **PASS (AA)** | Nội dung cảnh báo trong `Network Error Banner` (`S07`). |
-| `text/on-dark` trên `brand/cta-orange` | `#FFFFFF` (Bold 15–16sp) trên `#F27024` | **3.12 : 1** *(UI Control / Bold Label)* | ≥ 3.0 : 1 (UI Component & Large/Bold Text) | ✅ **PASS (AA)** | Nút CTA chính `Book via Google Calendar` kèm icon lịch rõ nét (`S05`). |
+| `text/on-dark` trên `brand/cta-orange` | `#FFFFFF` (Bold 15–16sp) trên `#F27024` | **3.12 : 1** *(UI Control / Bold Label)* | ≥ 3.0 : 1 (UI Component & Large/Bold Text) | ✅ **PASS (AA)** | Nút `Xem Lịch Google Calendar` kèm icon lịch rõ nét (`S05`). |
 
 ---
 
